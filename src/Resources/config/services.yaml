@@ -1,0 +1,50 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Adeliom\EasyPageBundle\Controller\:
+        resource: '../../Controller'
+        autowire: true
+        autoconfigure: true
+        tags: [ 'controller.service_arguments' ]
+
+    easy_page.route_loader:
+        class: Adeliom\EasyPageBundle\Routing\PageLoader
+        arguments:
+            - '%easy_page.page_controller%'
+            - '%easy_page.page_class%'
+            - '@easy_page.repository'
+            - '%kernel.environment%'
+        tags: [ routing.loader ]
+
+    easy_page.repository:
+        class: '%easy_page.page_repository%'
+        arguments:
+            - '@Doctrine\Persistence\ManagerRegistry'
+            - '%easy_page.page_class%'
+        calls:
+            - [ 'setConfig', [ '%easy_page.cache%' ] ]
+        tags: [ doctrine.repository_service ]
+
+    Adeliom\EasyPageBundle\EventListener\LayoutsListener:
+        arguments:
+            - '%easy_page.layouts%'
+            - '@twig'
+            - '@easy_page.repository'
+        tags:
+            - kernel.event_subscriber
+
+    Adeliom\EasyPageBundle\EventListener\DoctrineMappingListener:
+        arguments:
+            - '%easy_page.page_class%'
+        tags:
+            - doctrine.event_subscriber
+
+    easy_page.sitemap.page_subscriber:
+        class: Adeliom\EasyPageBundle\EventListener\SitemapSubscriber
+        arguments:
+            - "@router"
+            - "@easy_page.repository"
+        tags:
+            - { name: "kernel.event_subscriber", priority: 100 }

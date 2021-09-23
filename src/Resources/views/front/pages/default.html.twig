@@ -1,0 +1,50 @@
+{% set layout = app.request.attributes.get('_easy_page_layout') -%}
+{% extends layout.resource %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% for asset_css in layout.assets_css %}
+        <link rel="stylesheet" href="{{ asset(asset_css) }}">
+    {% endfor %}
+    {% for asset_webpack in layout.assets_webpack %}
+        {{ encore_entry_link_tags('asset_webpack') }}
+    {% endfor %}
+    {% if page.css %}
+        <style type="text/css" id="easy_page_css">
+            {{- page.css | raw -}}
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block easy_page_head_metas %}
+{{- seo_metas(page.seo) -}}
+{% endblock %}
+
+{% block title %}{{- seo_title(page.name) -}}{% endblock %}
+
+{% block easy_page_breadcrumbs %}
+    {{ seo_breadcrumb() }}
+{% endblock %}
+
+{% block easy_page_page_content %}
+    <section>
+        <article>
+            <h1>{{ page.name }}</h1>
+        </article>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% for asset_js in layout.assets_js %}
+        <script type="text/javascript" src="{{ asset(asset_js) }}"></script>
+    {% endfor %}
+    {% for asset_webpack in layout.assets_webpack %}
+        {{ encore_entry_script_tags('asset_webpack') }}
+    {% endfor %}
+    {% if page.js %}
+        <script type="text/javascript" id="easy_page_js">
+            {{- page.js | raw -}}
+        </script>
+    {% endif %}
+{% endblock %}
