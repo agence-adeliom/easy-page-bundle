@@ -1,42 +1,35 @@
-# EasyEditorBundle
-Symfony bundle that integrates Editor.js primarily with Symfony Forms.
+
+![Adeliom](https://adeliom.com/public/uploads/2017/09/Adeliom_logo.png)
+
+# Easy Page Bundle
+
+A basic CMS system for Easyadmin.
 
 ## Installation
 
-### Symfony
+Install with composer
 
-1. Download the package with composer: `$ composer require tbmatuka/editorjs-bundle`
-1. Add the bundle to `bundles.php` if it wasn't added automatically: `Adeliom\EasyEditorBundle\TbmatukaEditorjsBundle::class => ['all' => true],`
-1. Copy the example package config file (`examples/ediotrjs.yaml`) or use it as an example to create your own configuration.
-1. Add the form theme to your twig configuration:
-```php
-twig:
-  form_themes:
-    - '@TbmatukaEditorjs/Form/editorjs_widget.html.twig'
+```bash
+composer require agence-adeliom/easy-page-bundle
 ```
 
-### JavaScript
+## Documentation
 
-There is an example of the JS implementation in `examples/editorjs-init.js`.
+TODO
 
-#### Encore/webpack
 
-If you're using Encore, you will need to install the npm package for Editor.js (`@editorjs/editorjs`) and any plugins that you want to use. Copy the example to your assets dir, add the plugin classes to the array and import the file from your main JS file.
+## License
 
-#### Inline
-Configuration options and examples will have to be added for other loading methods (like loading JS from the CDN or a local path inline in the widget), but they're not there for now.
+[MIT](https://choosealicense.com/licenses/mit/)
 
-## Usage
 
-### Symfony Forms
+## Authors
 
-You can use the `EditorjsType` in your forms to get Editor.js on the frontend. Data (decoded json) is returned as an array.
+- [@arnaud-ritti](https://github.com/arnaud-ritti)
 
-### Twig
 
-You can get an Editor.js config directly from the Twig extension. Check the form widget in `src/Resources/views/Form/editorjs_widget.html.twig` to see how to use it. The `editorjs()` Twig function accepts either a configuration object or just the name of a configuration that you want to use.
+## Thanks to
 
-## Contributing
+[Orbitale/CmsBundle](https://github.com/Orbitale/CmsBundle)
 
-Any kind of help is welcome, but especially information about the included JS not working in specific browsers. Please open an issue to discuss whatever you want to work on before you submit a pull request and avoid any kind of BC breaking changes unless they are agreed to in the issue discussion.
-# easy-page-bundle
+

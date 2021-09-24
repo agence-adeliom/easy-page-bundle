@@ -5,7 +5,7 @@ namespace Adeliom\EasyPageBundle\Controller;
 use Adeliom\EasyPageBundle\Entity\Page;
 use Adeliom\EasyPageBundle\Event\EasyPageEvent;
 use Adeliom\EasyPageBundle\Repository\PageRepository;
-use Adeliom\EasySeoBundle\Services\BreadCrumbCollection;
+use Adeliom\EasySeoBundle\Services\BreadcrumbCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -17,7 +17,7 @@ class PageController extends AbstractPageController
         return array_merge(parent::getSubscribedServices(), [
             'easy_page.repository' => '?'.PageRepository::class,
             'event_dispatcher' => '?'.EventDispatcherInterface::class,
-            'easy_seo.breadcrumb' => '?'.BreadCrumbCollection::class,
+            'easy_seo.breadcrumb' => '?'.BreadcrumbCollection::class,
         ]);
     }
 
