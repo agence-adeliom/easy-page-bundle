@@ -40,7 +40,7 @@
         <script type="text/javascript" src="{{ asset(asset_js) }}"></script>
     {% endfor %}
     {% for asset_webpack in layout.assets_webpack %}
-        {{ encore_entry_script_tags('asset_webpack') }}
+        {{ encore_entry_script_tags(asset_webpack) }}
     {% endfor %}
     {% if page.js %}
         <script type="text/javascript" id="easy_page_js">
