@@ -77,6 +77,11 @@ class PageController extends AbstractPageController
          */
         $result = $this->get('event_dispatcher')->dispatch($event, EasyPageEvent::NAME);
 
+        if (!empty($args["page"]->getAction())) {
+            $args = $result->getArgs();
+            return $this->forward($args["page"]->getAction(), $args);
+        }
+
         return $this->render($result->getTemplate(), $result->getArgs());
     }
 
