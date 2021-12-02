@@ -79,7 +79,7 @@ class PageController extends AbstractPageController
 
         if (!empty($args["page"]->getAction())) {
             $args = $result->getArgs();
-            return $this->forward($args["page"]->getAction(), $args);
+            return $this->forward($args["page"]->getAction(), $args, $request->query->all());
         }
 
         return $this->render($result->getTemplate(), $result->getArgs());
