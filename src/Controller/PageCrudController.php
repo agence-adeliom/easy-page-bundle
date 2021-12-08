@@ -27,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class PageCrudController extends AbstractCrudController
 {
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
         ]);
