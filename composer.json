@@ -1,7 +1,7 @@
 {
     "name": "agence-adeliom/easy-page-bundle",
     "type": "symfony-bundle",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A simple lightweight CMS bundle for Symfony",
     "keywords": ["symfony", "cms", "easyadmin"],
     "homepage": "https://github.com/agence-adeliom/easy-page-bundle",
