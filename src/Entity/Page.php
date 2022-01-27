@@ -254,7 +254,7 @@ class Page {
     public function onRemove(LifecycleEventArgs $event): void
     {
         $em = $event->getEntityManager();
-        if (count($this->children)) {
+        if ($this->children !== null && count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);
                 $em->persist($child);
