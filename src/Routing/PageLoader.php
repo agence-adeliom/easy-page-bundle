@@ -11,7 +11,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class PageLoader extends Loader
 {
-    private $isLoaded = false;
+    private bool $isLoaded = false;
 
     private $controller;
     private $entity;
@@ -28,6 +28,11 @@ class PageLoader extends Loader
 
     }
 
+    /**
+     * @return mixed
+     *
+     * @throws \Exception If something went wrong
+     */
     public function load($resource, string $type = null)
     {
         if (true === $this->isLoaded) {
@@ -68,7 +73,7 @@ class PageLoader extends Loader
         return $routes;
     }
 
-    public function supports($resource, string $type = null)
+    public function supports($resource, string $type = null): bool
     {
         return 'easy_page' === $type;
     }

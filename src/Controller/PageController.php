@@ -9,9 +9,26 @@ use Adeliom\EasySeoBundle\Services\BreadcrumbCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Twig\Environment;
 
 class PageController extends AbstractPageController
 {
+    private Environment $twig;
+
+    private BreadcrumbCollection $breadcrumb;
+
+    /**
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+     */
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(BreadcrumbCollection $breadcrumb, Environment $twig, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->twig = $twig;
+        $this->breadcrumb = $breadcrumb;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
@@ -45,23 +62,22 @@ class PageController extends AbstractPageController
             return $this->redirect($this->generateUrl('easy_page_index', $params));
         }
 
-        if ($currentPage->getTemplate() && $this->get('twig')->getLoader()->exists('@EasyPage/front/pages/' . $currentPage->getTemplate() . '.html.twig')) {
+        if ($currentPage->getTemplate() && $this->twig->getLoader()->exists('@EasyPage/front/pages/' . $currentPage->getTemplate() . '.html.twig')) {
             $template = '@EasyPage/front/pages/' . $currentPage->getTemplate() . '.html.twig';
         }
 
-        if ($currentPage->getTemplate() && $this->get('twig')->getLoader()->exists('pages/' . $currentPage->getTemplate() . '.html.twig')) {
+        if ($currentPage->getTemplate() && $this->twig->getLoader()->exists('pages/' . $currentPage->getTemplate() . '.html.twig')) {
             $template = 'pages/' . $currentPage->getTemplate() . '.html.twig';
         }
 
-        if (!$this->get('twig')->getLoader()->exists($template)) {
+        if (!$this->twig->getLoader()->exists($template)) {
             throw new \Exception('Template not found ' . $template);
         }
 
-        $breadcrumb = $this->get("easy_seo.breadcrumb");
-        $breadcrumb->addRouteItem('homepage', ['route' => "easy_page_index"]);
+        $this->breadcrumb->addRouteItem('homepage', ['route' => "easy_page_index"]);
         if (!$currentPage->isHomepage()){
             foreach ($pages as $page){
-                $breadcrumb->addRouteItem($page->getName(), ['route' => "easy_page_index", 'params' => ['slugs' => $page->getTree()]]);
+                $this->breadcrumb->addRouteItem($page->getName(), ['route' => "easy_page_index", 'params' => ['slugs' => $page->getTree()]]);
             }
         }
 
@@ -69,13 +85,13 @@ class PageController extends AbstractPageController
         $args = [
             'pages' => $pages,
             'page'  => $currentPage,
-            'breadcrumb' => $breadcrumb
+            'breadcrumb' => $this->breadcrumb
         ];
         $event = new EasyPageEvent($currentPage, $args, $template);
         /**
          * @var EasyPageEvent $result;
          */
-        $result = $this->get('event_dispatcher')->dispatch($event, EasyPageEvent::NAME);
+        $result = $this->eventDispatcher->dispatch($event, EasyPageEvent::NAME);
 
         if (!empty($args["page"]->getAction())) {
             $args = $result->getArgs();

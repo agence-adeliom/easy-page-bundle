@@ -13,22 +13,22 @@
     {% set text %}
 
         <div class="sf-toolbar-info-piece">
-            <b>Name</b>
+            <strong>Name</strong>
             <span>{{ collector.layout.name|default("none") }}</span>
         </div>
 
         <div class="sf-toolbar-info-piece">
-            <b>Pattern</b>
+            <strong>Pattern</strong>
             <span class="sf-toolbar-status">{{ collector.layout.pattern|default("*") }}</span>
         </div>
 
         <div class="sf-toolbar-info-piece">
-            <b>Host</b>
+            <strong>Host</strong>
             <span>{{ collector.layout.host|default("none") }}</span>
         </div>
 
         <div class="sf-toolbar-info-piece">
-            <b>Resource</b>
+            <strong>Resource</strong>
             <span>{{ collector.layout.resource|default("none") }}</span>
         </div>
     {% endset %}
@@ -70,6 +70,7 @@
 
     <h3>Assets</h3>
     <table>
+        <caption>List of assets uses</caption>
         <thead>
         <tr>
             <th>Type</th>
@@ -101,6 +102,7 @@
 
     <h3>Layouts</h3>
     <table>
+        <caption>List of layout uses</caption>
         <thead>
         <tr>
             <th>Name</th>

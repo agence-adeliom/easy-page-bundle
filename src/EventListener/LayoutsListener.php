@@ -13,20 +13,11 @@ use Twig\Source;
 
 class LayoutsListener implements EventSubscriberInterface
 {
-    /**
-     * @var array
-     */
-    private $layouts;
+    private array $layouts;
 
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private Environment $twig;
 
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
+    private PageRepository $pageRepository;
 
     public function __construct(array $layouts, Environment $twig, PageRepository $pageRepository)
     {
@@ -38,7 +29,7 @@ class LayoutsListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => ['setRequestLayout', 33],
@@ -100,7 +91,7 @@ class LayoutsListener implements EventSubscriberInterface
         $slugsArray = preg_split('~/~', $path, -1, PREG_SPLIT_NO_EMPTY);
         $pages = $this->pageRepository->findFrontPages($slugsArray, $event->getRequest()->getHost(), $event->getRequest()->getLocale());
 
-        if (count($pages) || (count($slugsArray) && count($pages) == count($slugsArray))) {
+        if (count($pages) || ((is_countable($slugsArray) ? count($slugsArray) : 0) && count($pages) == (is_countable($slugsArray) ? count($slugsArray) : 0))) {
             $event->getRequest()->attributes->set('_easy_page_pages', $pages);
         }
         $event->getRequest()->attributes->set('_easy_page_layout', $finalLayout);

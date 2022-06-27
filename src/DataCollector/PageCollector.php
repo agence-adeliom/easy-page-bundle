@@ -2,20 +2,14 @@
 
 namespace Adeliom\EasyPageBundle\DataCollector;
 
-
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 final class PageCollector extends AbstractDataCollector
 {
-    /**
-     * @var ContainerBagInterface
-     */
-    protected $parameterBag;
+    protected ContainerBagInterface $parameterBag;
 
     public function __construct(ContainerBagInterface $parameterBag)
     {

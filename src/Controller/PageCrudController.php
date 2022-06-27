@@ -2,7 +2,6 @@
 
 namespace Adeliom\EasyPageBundle\Controller;
 
-
 use Adeliom\EasyFieldsBundle\Admin\Field\EnumField;
 use Adeliom\EasyCommonBundle\Enum\ThreeStateStatusEnum;
 use Adeliom\EasySeoBundle\Admin\Field\SEOField;
@@ -15,18 +14,22 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class PageCrudController extends AbstractCrudController
 {
+    private AdminContextProvider $adminContextProvider;
+
+    public function __construct(AdminContextProvider $adminContextProvider)
+    {
+        $this->adminContextProvider = $adminContextProvider;
+    }
+
     public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
@@ -72,7 +75,7 @@ abstract class PageCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $context = $this->get(AdminContextProvider::class)->getContext();
+        $context = $this->adminContextProvider->getContext();
         $subject = $context->getEntity();
 
         yield IdField::new('id')->onlyOnDetail();

@@ -11,15 +11,9 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 class SitemapSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var PageRepository
-     */
-    private $repository;
+    private PageRepository $repository;
 
     /**
      * @param UrlGeneratorInterface $urlGenerator
@@ -34,7 +28,7 @@ class SitemapSubscriber implements EventSubscriberInterface
     /**
      * @inheritdoc
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             SitemapPopulateEvent::ON_SITEMAP_POPULATE => 'populate',

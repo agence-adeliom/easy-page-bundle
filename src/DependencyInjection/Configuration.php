@@ -2,14 +2,12 @@
 
 namespace Adeliom\EasyPageBundle\DependencyInjection;
 
-
 use Adeliom\EasyPageBundle\Controller\PageController;
 use Adeliom\EasyPageBundle\Entity\Page;
 use Adeliom\EasyPageBundle\Repository\PageRepository;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -18,10 +16,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('easy_page');
         $rootNode    = $treeBuilder->getRootNode();
