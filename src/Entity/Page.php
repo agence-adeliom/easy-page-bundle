@@ -16,75 +16,58 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @UniqueEntity("slug")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\MappedSuperclass(repositoryClass="Adeliom\EasyPageBundle\Repository\PageRepository")
- */
-class Page {
-
+#[UniqueEntity('slug')]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\MappedSuperclass(repositoryClass: 'Adeliom\EasyPageBundle\Repository\PageRepository')]
+class Page
+{
     public const HOMEPAGE = "homepage";
-
     use EntityIdTrait;
     use EntityTimestampableTrait {
         EntityTimestampableTrait::__construct as private __TimestampableConstruct;
     }
-
     use EntityNameSlugTrait;
     use EntityThreeStateStatusTrait;
     use EntityPublishableTrait {
         EntityPublishableTrait::__construct as private __PublishableConstruct;
     }
-
     use EntitySeoTrait {
         EntitySeoTrait::__construct as private __SEOConstruct;
     }
-
-
     /**
      * @var null|Page
-     *
-     * @Assert\Type(Page::class)
      */
+    #[Assert\Type(Page::class)]
     protected $parent;
-
     /**
      * @var Page[]|ArrayCollection
      */
     protected $children;
-
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="action", type="string", nullable=true)
-     * @Assert\Type("string")
      */
+    #[ORM\Column(name: 'action', type: 'string', nullable: true)]
+    #[Assert\Type('string')]
     protected $action;
-
     /**
      * @var string|null
-     * @Groups("main")
-     * @ORM\Column(name="template", type="string", nullable=true)
-     * @Assert\Type("string")
      */
+    #[Groups('main')]
+    #[ORM\Column(name: 'template', type: 'string', nullable: true)]
+    #[Assert\Type('string')]
     protected $template;
-
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="css", type="text", nullable=true)
-     * @Assert\Type("string")
      */
+    #[ORM\Column(name: 'css', type: 'text', nullable: true)]
+    #[Assert\Type('string')]
     protected $css;
-
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="js", type="text", nullable=true)
-     * @Assert\Type("string")
      */
+    #[ORM\Column(name: 'js', type: 'text', nullable: true)]
+    #[Assert\Type('string')]
     protected $js;
-
     public function __construct()
     {
         $this->__TimestampableConstruct();
@@ -92,7 +75,6 @@ class Page {
         $this->__SEOConstruct();
         $this->children  = new ArrayCollection();
     }
-
     public function setParent(?Page $parent = null)
     {
         if ($parent === $this) {
@@ -109,12 +91,10 @@ class Page {
             $parent->addChildren($this);
         }
     }
-
     public function getParent()
     {
         return $this->parent;
     }
-
     /**
      * @return Page[]|ArrayCollection
      */
@@ -122,7 +102,6 @@ class Page {
     {
         return $this->children;
     }
-
     public function addChildren(Page $page): void
     {
         $this->children->add($page);
@@ -131,12 +110,10 @@ class Page {
             $page->setParent($this);
         }
     }
-
     public function removeChildren(Page $page): void
     {
         $this->children->removeElement($page);
     }
-
     public function getTree(string $separator = '/', bool $name = false): string
     {
         $tree = '';
@@ -153,7 +130,6 @@ class Page {
 
         return trim($tree, $separator);
     }
-
     public function getTreeDisplay(): string
     {
         $tree = ' ' . $this->getName();
@@ -166,12 +142,10 @@ class Page {
 
         return mb_substr($tree, 1);
     }
-
     public function isHomepage(): bool
     {
         return $this->template == self::HOMEPAGE;
     }
-
     /**
      * @return string|null
      */
@@ -179,7 +153,6 @@ class Page {
     {
         return $this->action;
     }
-
     /**
      * @param string|null $action
      */
@@ -187,7 +160,6 @@ class Page {
     {
         $this->action = $action;
     }
-
     /**
      * @return string|null
      */
@@ -195,7 +167,6 @@ class Page {
     {
         return $this->template;
     }
-
     /**
      * @param string|null $template
      */
@@ -203,7 +174,6 @@ class Page {
     {
         $this->template = $template;
     }
-
     /**
      * @return string|null
      */
@@ -211,7 +181,6 @@ class Page {
     {
         return $this->css;
     }
-
     /**
      * @param string $css
      */
@@ -219,7 +188,6 @@ class Page {
     {
         $this->css = $css;
     }
-
     /**
      * @return string|null
      */
@@ -227,7 +195,6 @@ class Page {
     {
         return $this->js;
     }
-
     /**
      * @param string $js
      */
@@ -235,23 +202,16 @@ class Page {
     {
         $this->js = $js;
     }
-
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function setSeoTitle(LifecycleEventArgs $event): void
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setSeoTitle(LifecycleEventArgs $event) : void
     {
         if(empty($this->getSEO()->title)){
             $this->getSEO()->title = $this->getName();
         }
     }
-
-
-    /**
-     * @ORM\PreRemove()
-     */
-    public function onRemove(LifecycleEventArgs $event): void
+    #[ORM\PreRemove]
+    public function onRemove(LifecycleEventArgs $event) : void
     {
         $em = $event->getEntityManager();
         if ($this->children !== null && count($this->children)) {
