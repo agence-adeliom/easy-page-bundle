@@ -2,8 +2,8 @@
 
 namespace Adeliom\EasyPageBundle\Controller;
 
-use Adeliom\EasyFieldsBundle\Admin\Field\EnumField;
 use Adeliom\EasyCommonBundle\Enum\ThreeStateStatusEnum;
+use Adeliom\EasyFieldsBundle\Admin\Field\EnumField;
 use Adeliom\EasySeoBundle\Admin\Field\SEOField;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
@@ -23,11 +23,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 
 abstract class PageCrudController extends AbstractCrudController
 {
-    private AdminContextProvider $adminContextProvider;
-
-    public function __construct(AdminContextProvider $adminContextProvider)
-    {
-        $this->adminContextProvider = $adminContextProvider;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private AdminContextProvider $adminContextProvider
+    ) {
     }
 
     public static function getSubscribedServices(): array
@@ -53,9 +54,7 @@ abstract class PageCrudController extends AbstractCrudController
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-
-        return $qb;
+        return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -70,6 +69,7 @@ abstract class PageCrudController extends AbstractCrudController
                 $actions->add($page, $action->getAsConfigObject());
             }
         }
+
         return $actions;
     }
 
@@ -111,12 +111,13 @@ abstract class PageCrudController extends AbstractCrudController
             ->setColumns(12);
 
         yield AssociationField::new("parent", "easy.page.admin.field.parent")
-            ->setQueryBuilder(function (QueryBuilder $queryBuilder) use ($subject) {
+            ->setQueryBuilder(static function (QueryBuilder $queryBuilder) use ($subject) {
                 $rootAllias = $queryBuilder->getAllAliases()[0];
-                if($subject->getPrimaryKeyValue()){
+                if ($subject->getPrimaryKeyValue()) {
                     $queryBuilder->andWhere(sprintf("%s.id != :currentID", $rootAllias))
                         ->setParameter("currentID", $subject->getPrimaryKeyValue());
                 }
+
                 return $queryBuilder;
             })
             ->setColumns(12);

@@ -3,26 +3,24 @@
 namespace Adeliom\EasyPageBundle\EventListener;
 
 use Adeliom\EasyPageBundle\Repository\PageRepository;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SitemapSubscriber implements EventSubscriberInterface
 {
-    private UrlGeneratorInterface $urlGenerator;
-
-    private PageRepository $repository;
-
-    /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param PageRepository    $repository
-     */
-    public function __construct(UrlGeneratorInterface $urlGenerator, PageRepository $repository)
-    {
-        $this->urlGenerator = $urlGenerator;
-        $this->repository = $repository;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private UrlGeneratorInterface $urlGenerator,
+        /**
+         * @readonly
+         */
+        private PageRepository $repository
+    ) {
     }
 
     /**
@@ -35,23 +33,17 @@ class SitemapSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param SitemapPopulateEvent $event
-     */
     public function populate(SitemapPopulateEvent $event): void
     {
         $this->registerPagesUrls($event->getUrlContainer());
     }
 
-    /**
-     * @param UrlContainerInterface $urls
-     */
     public function registerPagesUrls(UrlContainerInterface $urls): void
     {
         $pages = $this->repository->getPublished();
 
         foreach ($pages as $page) {
-            if($page->getSEO()->sitemap) {
+            if ($page->getSEO()->sitemap) {
                 $urls->addUrl(
                     new UrlConcrete(
                         $this->urlGenerator->generate(

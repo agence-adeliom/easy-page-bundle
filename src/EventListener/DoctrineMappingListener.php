@@ -13,12 +13,12 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  */
 class DoctrineMappingListener implements EventSubscriber
 {
-    private string $pageClass;
-
-
-    public function __construct(string $pageClass)
-    {
-        $this->pageClass = $pageClass;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private string $pageClass
+    ) {
     }
 
     public function getSubscribedEvents(): array
@@ -36,7 +36,6 @@ class DoctrineMappingListener implements EventSubscriber
             $this->processParent($classMetadata, $this->pageClass);
             $this->processChildren($classMetadata, $this->pageClass);
         }
-
     }
 
     /**

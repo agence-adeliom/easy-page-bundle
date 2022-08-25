@@ -2,30 +2,29 @@
 
 namespace Adeliom\EasyPageBundle\Routing;
 
-
 use Adeliom\EasyPageBundle\Repository\PageRepository;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class PageLoader extends Loader
 {
     private bool $isLoaded = false;
 
-    private $controller;
-    private $entity;
-    private $repository;
 
-
-    public function __construct(string $controller, string $entity, PageRepository $repository, string $env = null)
-    {
+    public function __construct(/**
+         * @readonly
+         */
+        private string $controller, /**
+         * @readonly
+         */
+        private string $entity, /**
+         * @readonly
+         */
+        private PageRepository $repository,
+        string $env = null
+    ) {
         parent::__construct($env);
-
-        $this->controller = $controller;
-        $this->entity = $entity;
-        $this->repository = $repository;
-
     }
 
     /**
@@ -35,7 +34,7 @@ class PageLoader extends Loader
      */
     public function load($resource, string $type = null)
     {
-        if (true === $this->isLoaded) {
+        if ($this->isLoaded) {
             throw new \RuntimeException('Do not add the "easy_page" loader twice');
         }
 

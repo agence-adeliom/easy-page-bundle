@@ -13,17 +13,20 @@ use Twig\Source;
 
 class LayoutsListener implements EventSubscriberInterface
 {
-    private array $layouts;
-
-    private Environment $twig;
-
-    private PageRepository $pageRepository;
-
-    public function __construct(array $layouts, Environment $twig, PageRepository $pageRepository)
-    {
-        $this->layouts = $layouts;
-        $this->twig    = $twig;
-        $this->pageRepository    = $pageRepository;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private array $layouts,
+        /**
+         * @readonly
+         */
+        private Environment $twig,
+        /**
+         * @readonly
+         */
+        private PageRepository $pageRepository
+    ) {
     }
 
     /**
@@ -57,7 +60,7 @@ class LayoutsListener implements EventSubscriberInterface
             }
 
             // Check pattern
-            if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
+            if ($layoutConfig['pattern'] && preg_match('~' . $layoutConfig['pattern'] . '~', $path)) {
                 $match = true;
             }
 
@@ -83,17 +86,19 @@ class LayoutsListener implements EventSubscriberInterface
 
             throw new LoaderError(sprintf(
                 'Unable to find template %s for layout %s. The "layout" parameter must be a valid twig view to be used as a layout.',
-                $finalLayout['resource'], $finalLayout['name']
+                $finalLayout['resource'],
+                $finalLayout['name']
             ), 0, $source);
         }
 
         /** @var Page[] $pages */
-        $slugsArray = preg_split('~/~', $path, -1, PREG_SPLIT_NO_EMPTY);
+        $slugsArray = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
         $pages = $this->pageRepository->findFrontPages($slugsArray, $event->getRequest()->getHost(), $event->getRequest()->getLocale());
 
         if (count($pages) || ((is_countable($slugsArray) ? count($slugsArray) : 0) && count($pages) == (is_countable($slugsArray) ? count($slugsArray) : 0))) {
             $event->getRequest()->attributes->set('_easy_page_pages', $pages);
         }
+
         $event->getRequest()->attributes->set('_easy_page_layout', $finalLayout);
     }
 }

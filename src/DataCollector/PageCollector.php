@@ -9,11 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PageCollector extends AbstractDataCollector
 {
-    protected ContainerBagInterface $parameterBag;
-
-    public function __construct(ContainerBagInterface $parameterBag)
+    public function __construct(protected ContainerBagInterface $parameterBag)
     {
-        $this->parameterBag = $parameterBag;
     }
 
     public function collect(Request $request, Response $response, \Throwable $exception = null): void
@@ -27,17 +24,11 @@ final class PageCollector extends AbstractDataCollector
         ];
     }
 
-    /**
-     * @return array
-     */
     public function getLayout(): array
     {
         return $this->data["layout"] ?: [];
     }
 
-    /**
-     * @return array
-     */
     public function getLayouts(): array
     {
         return $this->data["layouts"] ?: [];
