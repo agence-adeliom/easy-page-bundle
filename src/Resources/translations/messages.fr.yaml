@@ -1,0 +1,42 @@
+easy:
+  page:
+    admin:
+      crud:
+        title:
+          page:
+            edit: Editer la page
+            index: Liste des pages
+            new: Nouvelle page
+            detail: Détail de la page
+        label:
+          page:
+            singular: une page
+            plural: des pages
+            new: Nouvelle page
+            edit: Editer la page
+            delete: Supprimer la page
+            saveAndReturn: Enregistrer la page et retourner à la liste
+            saveAndContinue: Enregistrer la page et revenir ici
+            saveAndAddAnother: Enregistrer la page puis en créer une autre
+      menu:
+        pages: Pages
+        contents: Contenus
+      panel:
+        information: Informations
+        metadatas: Métadonnées
+        seo: SEO
+        publication: Publication
+      field:
+        action: Action
+        action_help: "Vous devez vider le cache Symfony pour appliquer les modifications"
+        parent: Page parente
+        home_page: Page d'accueil
+        name: Nom
+        state: Status
+        publishDate: Date de publication
+        unpublishDate: Date de dépublication
+        slug: Permalien
+        slug_edit: "Etes-vous sur de vouloir modifier le permalien ?"
+        category: Catégorie
+    front:
+      home: Page d'accueil

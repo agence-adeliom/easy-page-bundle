@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.attributes.get('_locale') }}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ seo_title('Welcome to Easy Page !') }}{% endblock %}</title>
+
+    {% block easy_page_head_metas %}{% endblock %}
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <div class="col-lg-8 mx-auto p-3 py-md-5">
+        {% block easy_page_page_header %}
+        <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+            <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                <span class="fs-4">{% block header_title %}Welcome to Easy Page !{% endblock %}</span>
+            </a>
+        </header>
+        {% endblock %}
+        {% block easy_page_breadcrumbs %}{% endblock %}
+        {% block easy_page_page_content %}
+            <main>
+                {% block easy_page_pages_list %}{% endblock %}
+            </main>
+        {% endblock %}
+    </div>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

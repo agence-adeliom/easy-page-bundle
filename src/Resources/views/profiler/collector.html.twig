@@ -1,0 +1,125 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{# templates/data_collector/seo_collector.html.twig #}
+
+{% block toolbar %}
+    {% set icon %}
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file" class="svg-inline--fa fa-file fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>
+        <span class="sf-toolbar-value">
+            Easy Page
+        </span>
+    {% endset %}
+
+    {% set text %}
+
+        <div class="sf-toolbar-info-piece">
+            <strong>Name</strong>
+            <span>{{ collector.layout.name|default("none") }}</span>
+        </div>
+
+        <div class="sf-toolbar-info-piece">
+            <strong>Pattern</strong>
+            <span class="sf-toolbar-status">{{ collector.layout.pattern|default("*") }}</span>
+        </div>
+
+        <div class="sf-toolbar-info-piece">
+            <strong>Host</strong>
+            <span>{{ collector.layout.host|default("none") }}</span>
+        </div>
+
+        <div class="sf-toolbar-info-piece">
+            <strong>Resource</strong>
+            <span>{{ collector.layout.resource|default("none") }}</span>
+        </div>
+    {% endset %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+{% endblock %}
+
+
+{% block menu %}
+    <span class="label ">
+        <span class="icon">
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file" class="svg-inline--fa fa-file fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>
+        </span>
+        <strong>Easy Page</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>Easy Page</h2>
+    {{ encore_entry_link_tags('') }}
+    <div class="metrics">
+        <div class="metric">
+            <span class="value">{{ collector.layout.name|default("(none)") }}</span>
+            <span class="label">Name</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ collector.layout.pattern|default("*") }}</span>
+            <span class="label">Pattern</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ collector.layout.host|default("(none)") }}</span>
+            <span class="label">Host</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ collector.layout.resource|default("(none)") }}</span>
+            <span class="label">Resource</span>
+        </div>
+    </div>
+
+    <h3>Assets</h3>
+    <table>
+        <caption>List of assets uses</caption>
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for assets_css in collector.layout.assets_css %}
+            <tr class="">
+                <td class="font-normal text-small text-bold">css</td>
+                <td class="break-long-words">{{ assets_css }}</td>
+            </tr>
+        {% endfor %}
+        {% for assets_js in collector.layout.assets_js %}
+            <tr class="">
+                <td class="font-normal text-small text-bold">js</td>
+                <td class="break-long-words">{{ assets_js }}</td>
+            </tr>
+        {% endfor %}
+        {% for webpack in collector.layout.assets_webpack %}
+            <tr class="">
+                <td class="font-normal text-small text-bold">webpack</td>
+                <td class="break-long-words">{{ webpack }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <h3>Layouts</h3>
+    <table>
+        <caption>List of layout uses</caption>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Pattern</th>
+            <th>Host</th>
+            <th>Resource</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for layout in collector.layouts %}
+            <tr class="{{ collector.layout.name == layout.name ? "status-success" : "" }}">
+                <td class="break-long-words">{{ layout.name|default("(none)") }}</td>
+                <td class="break-long-words">{{ layout.pattern|default("*") }}</td>
+                <td class="break-long-words">{{ layout.host|default("(none)") }}</td>
+                <td class="break-long-words">{{ layout.resource|default("(none)") }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

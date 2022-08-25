@@ -1,0 +1,45 @@
+easy:
+  page:
+    admin:
+      crud:
+        title:
+          page:
+            edit: Page edition
+            index: Pages list
+            new: New page
+            detail: Page details
+        label:
+          page:
+            singular: page
+            plural: pages
+            new: New page
+            edit: Edit
+            delete: Delete
+            saveAndReturn: Save and return
+            saveAndContinue: Save and continue
+            saveAndAddAnother: Save and add another
+      menu:
+        pages: Pages
+        contents: Contents
+      panel:
+        information: Informations
+        metadatas: Metadatas
+        seo: SEO
+        publication: PUblication
+      field:
+        action: Action
+        action_help: "To apply change you have to clear symfony cache"
+        parent: Parent page
+        name: Name
+        state: Status
+        publishDate: Publish date
+        unpublishDate: Unpublish date
+        slug: Permalink
+        slug_edit: "Are you sure you want to edit this permalink ?"
+        category: Category
+    front:
+      categories: Catégories
+      category: Catégorie
+      entries: Questions
+      readmore: Read more
+home: Homepage
