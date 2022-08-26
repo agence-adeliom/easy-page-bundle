@@ -7,23 +7,15 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class EasyPageEvent extends Event
 {
+    /**
+     * @var string
+     */
+    public const NAME = 'easypage.before_render';
 
-    public const NAME = "easypage.before_render";
-
-    protected $page;
-    protected $args;
-    protected $template;
-
-    public function __construct(Page $page, $args, $template)
+    public function __construct(protected Page $page, protected $args, protected $template)
     {
-        $this->page = $page;
-        $this->args = $args;
-        $this->template = $template;
     }
 
-    /**
-     * @return Page
-     */
     public function getPage(): Page
     {
         return $this->page;
@@ -54,6 +46,4 @@ class EasyPageEvent extends Event
     {
         $this->template = $template;
     }
-
-
 }

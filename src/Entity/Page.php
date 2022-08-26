@@ -9,43 +9,39 @@ use Adeliom\EasyCommonBundle\Traits\EntityPublishableTrait;
 use Adeliom\EasyCommonBundle\Traits\EntityThreeStateStatusTrait;
 use Adeliom\EasyCommonBundle\Traits\EntityTimestampableTrait;
 use Adeliom\EasySeoBundle\Traits\EntitySeoTrait;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @UniqueEntity("slug")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\MappedSuperclass(repositoryClass="Adeliom\EasyPageBundle\Repository\PageRepository")
- */
-class Page {
-
-    public const HOMEPAGE = "homepage";
-
+#[UniqueEntity('slug')]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\MappedSuperclass(repositoryClass: \Adeliom\EasyPageBundle\Repository\PageRepository::class)]
+class Page
+{
     use EntityIdTrait;
     use EntityTimestampableTrait {
-        EntityTimestampableTrait::__construct as private __TimestampableConstruct;
+        EntityTimestampableTrait::__construct as private TimestampableConstruct;
     }
-
     use EntityNameSlugTrait;
     use EntityThreeStateStatusTrait;
     use EntityPublishableTrait {
-        EntityPublishableTrait::__construct as private __PublishableConstruct;
+        EntityPublishableTrait::__construct as private PublishableConstruct;
     }
-
     use EntitySeoTrait {
-        EntitySeoTrait::__construct as private __SEOConstruct;
+        EntitySeoTrait::__construct as private SEOConstruct;
     }
-
+    /**
+     * @var string
+     */
+    public const HOMEPAGE = 'homepage';
 
     /**
-     * @var null|Page
-     *
-     * @Assert\Type(Page::class)
+     * @var Page|null
      */
+    #[Assert\Type(Page::class)]
     protected $parent;
 
     /**
@@ -53,44 +49,29 @@ class Page {
      */
     protected $children;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="action", type="string", nullable=true)
-     * @Assert\Type("string")
-     */
-    protected $action;
+    #[ORM\Column(name: 'action', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    #[Assert\Type('string')]
+    protected ?string $action = null;
 
-    /**
-     * @var string|null
-     * @Groups("main")
-     * @ORM\Column(name="template", type="string", nullable=true)
-     * @Assert\Type("string")
-     */
-    protected $template;
+    #[Groups('main')]
+    #[ORM\Column(name: 'template', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    #[Assert\Type('string')]
+    protected ?string $template = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="css", type="text", nullable=true)
-     * @Assert\Type("string")
-     */
-    protected $css;
+    #[ORM\Column(name: 'css', type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
+    protected ?string $css = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="js", type="text", nullable=true)
-     * @Assert\Type("string")
-     */
-    protected $js;
+    #[ORM\Column(name: 'js', type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
+    protected ?string $js = null;
 
     public function __construct()
     {
-        $this->__TimestampableConstruct();
-        $this->__PublishableConstruct();
-        $this->__SEOConstruct();
-        $this->children  = new ArrayCollection();
+        $this->TimestampableConstruct();
+        $this->PublishableConstruct();
+        $this->SEOConstruct();
+        $this->children = new ArrayCollection();
     }
 
     public function setParent(?Page $parent = null)
@@ -118,7 +99,7 @@ class Page {
     /**
      * @return Page[]|ArrayCollection
      */
-    public function getChildren()
+    public function getChildren(): array|ArrayCollection
     {
         return $this->children;
     }
@@ -143,11 +124,7 @@ class Page {
 
         $current = $this;
         do {
-            if($name){
-                $tree    = $current->getName().$separator.$tree;
-            }else{
-                $tree    = $current->getSlug().$separator.$tree;
-            }
+            $tree = $name ? $current->getName().$separator.$tree : $current->getSlug().$separator.$tree;
             $current = $current->getParent();
         } while ($current);
 
@@ -156,11 +133,11 @@ class Page {
 
     public function getTreeDisplay(): string
     {
-        $tree = ' ' . $this->getName();
+        $tree = ' '.$this->getName();
 
         $current = $this;
         do {
-            $tree    = '―'.$tree;
+            $tree = '―'.$tree;
             $current = $current->getParent();
         } while ($current);
 
@@ -169,100 +146,72 @@ class Page {
 
     public function isHomepage(): bool
     {
-        return $this->template == self::HOMEPAGE;
+        return self::HOMEPAGE == $this->template;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAction(): ?string
     {
         return $this->action;
     }
 
-    /**
-     * @param string|null $action
-     */
     public function setAction(?string $action): void
     {
         $this->action = $action;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTemplate(): ?string
     {
         return $this->template;
     }
 
-    /**
-     * @param string|null $template
-     */
     public function setTemplate(?string $template): void
     {
         $this->template = $template;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCss(): ?string
     {
         return $this->css;
     }
 
-    /**
-     * @param string $css
-     */
     public function setCss(string $css): void
     {
         $this->css = $css;
     }
 
-    /**
-     * @return string|null
-     */
     public function getJs(): ?string
     {
         return $this->js;
     }
 
-    /**
-     * @param string $js
-     */
     public function setJs(string $js): void
     {
         $this->js = $js;
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function setSeoTitle(LifecycleEventArgs $event): void
     {
-        if(empty($this->getSEO()->title)){
+        if (empty($this->getSEO()->title)) {
             $this->getSEO()->title = $this->getName();
         }
     }
 
-
-    /**
-     * @ORM\PreRemove()
-     */
+    #[ORM\PreRemove]
     public function onRemove(LifecycleEventArgs $event): void
     {
         $em = $event->getEntityManager();
-        if ($this->children !== null && count($this->children)) {
+        if (null !== $this->children && count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);
                 $em->persist($child);
             }
         }
+
         $this->setState(ThreeStateStatusEnum::UNPUBLISHED());
-        $this->parent  = null;
-        $this->setName($this->getName() . '-'.$this->getId().'-deleted');
-        $this->setSlug($this->getSlug() . '-'.$this->getId().'-deleted');
+        $this->parent = null;
+        $this->setName($this->getName().'-'.$this->getId().'-deleted');
+        $this->setSlug($this->getSlug().'-'.$this->getId().'-deleted');
     }
 }

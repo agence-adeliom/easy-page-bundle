@@ -13,20 +13,20 @@ use Twig\Environment;
 
 class PageController extends AbstractPageController
 {
-    private Environment $twig;
-
-    private BreadcrumbCollection $breadcrumb;
-
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(BreadcrumbCollection $breadcrumb, Environment $twig, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->twig = $twig;
-        $this->breadcrumb = $breadcrumb;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private BreadcrumbCollection $breadcrumb,
+        /**
+         * @readonly
+         */
+        private Environment $twig,
+        /**
+         * @readonly
+         */
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public static function getSubscribedServices(): array
@@ -40,7 +40,7 @@ class PageController extends AbstractPageController
 
     public function index(Request $request, string $slugs = '', string $_locale = null): Response
     {
-        if (preg_match('~/$~', $slugs)) {
+        if (preg_match('#/$#', $slugs)) {
             return $this->redirect($this->generateUrl('easy_page_index', ['slugs' => rtrim($slugs, '/')]));
         }
 
@@ -48,9 +48,9 @@ class PageController extends AbstractPageController
 
         $request->setLocale($_locale ?: $request->getLocale());
 
-        $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
+        $slugsArray = preg_split('#/#', $slugs, -1, PREG_SPLIT_NO_EMPTY);
 
-        $pages = $this->getPages($request->attributes->get("_easy_page_pages"));
+        $pages = $this->getPages($request->attributes->get('_easy_page_pages'));
 
         $currentPage = $this->getCurrentPage($pages, $slugsArray);
 
@@ -59,33 +59,33 @@ class PageController extends AbstractPageController
         // Example: if "/home" is a homepage, "/home" url is redirected to "/".
         if ($slugs && $currentPage->isHomepage()) {
             $params = ['slugs' => ''];
+
             return $this->redirect($this->generateUrl('easy_page_index', $params));
         }
 
-        if ($currentPage->getTemplate() && $this->twig->getLoader()->exists('@EasyPage/front/pages/' . $currentPage->getTemplate() . '.html.twig')) {
-            $template = '@EasyPage/front/pages/' . $currentPage->getTemplate() . '.html.twig';
+        if ($currentPage->getTemplate() && $this->twig->getLoader()->exists('@EasyPage/front/pages/'.$currentPage->getTemplate().'.html.twig')) {
+            $template = '@EasyPage/front/pages/'.$currentPage->getTemplate().'.html.twig';
         }
 
-        if ($currentPage->getTemplate() && $this->twig->getLoader()->exists('pages/' . $currentPage->getTemplate() . '.html.twig')) {
-            $template = 'pages/' . $currentPage->getTemplate() . '.html.twig';
+        if ($currentPage->getTemplate() && $this->twig->getLoader()->exists('pages/'.$currentPage->getTemplate().'.html.twig')) {
+            $template = 'pages/'.$currentPage->getTemplate().'.html.twig';
         }
 
         if (!$this->twig->getLoader()->exists($template)) {
-            throw new \Exception('Template not found ' . $template);
+            throw new \Exception('Template not found '.$template);
         }
 
-        $this->breadcrumb->addRouteItem('homepage', ['route' => "easy_page_index"]);
-        if (!$currentPage->isHomepage()){
-            foreach ($pages as $page){
-                $this->breadcrumb->addRouteItem($page->getName(), ['route' => "easy_page_index", 'params' => ['slugs' => $page->getTree()]]);
+        $this->breadcrumb->addRouteItem('homepage', ['route' => 'easy_page_index']);
+        if (!$currentPage->isHomepage()) {
+            foreach ($pages as $page) {
+                $this->breadcrumb->addRouteItem($page->getName(), ['route' => 'easy_page_index', 'params' => ['slugs' => $page->getTree()]]);
             }
         }
 
-
         $args = [
             'pages' => $pages,
-            'page'  => $currentPage,
-            'breadcrumb' => $this->breadcrumb
+            'page' => $currentPage,
+            'breadcrumb' => $this->breadcrumb,
         ];
         $event = new EasyPageEvent($currentPage, $args, $template);
         /**
@@ -93,9 +93,10 @@ class PageController extends AbstractPageController
          */
         $result = $this->eventDispatcher->dispatch($event, EasyPageEvent::NAME);
 
-        if (!empty($args["page"]->getAction())) {
+        if (!empty($args['page']->getAction())) {
             $args = $result->getArgs();
-            return $this->forward($args["page"]->getAction(), $args, $request->query->all());
+
+            return $this->forward($args['page']->getAction(), $args, $request->query->all());
         }
 
         return $this->render($result->getTemplate(), $result->getArgs());
@@ -121,19 +122,11 @@ class PageController extends AbstractPageController
     /**
      * Retrieves the current page based on page list and entered slugs.
      *
-     * @param Page[] $pages
-     * @param string[]  $slugsArray
-     *
-     * @return Page
+     * @param Page[]   $pages
+     * @param string[] $slugsArray
      */
     protected function getCurrentPage(array $pages, array $slugsArray): Page
     {
-        if (count($pages) === count($slugsArray)) {
-            $currentPage = $this->getFinalTreeElement($slugsArray, $pages);
-        } else {
-            $currentPage = current($pages);
-        }
-
-        return $currentPage;
+        return count($pages) === count($slugsArray) ? $this->getFinalTreeElement($slugsArray, $pages) : current($pages);
     }
 }

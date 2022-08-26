@@ -2,15 +2,16 @@
 
 namespace Adeliom\EasyPageBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Adeliom\EasyPageBundle\DependencyInjection\EasyPageExtension;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EasyPageBundle extends Bundle
 {
     /**
      * @return ExtensionInterface|null The container extension
      */
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new EasyPageExtension();
     }

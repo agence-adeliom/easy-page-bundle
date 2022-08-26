@@ -13,12 +13,12 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  */
 class DoctrineMappingListener implements EventSubscriber
 {
-    private string $pageClass;
-
-
-    public function __construct(string $pageClass)
-    {
-        $this->pageClass = $pageClass;
+    public function __construct(
+        /**
+         * @readonly
+         */
+        private string $pageClass
+    ) {
     }
 
     public function getSubscribedEvents(): array
@@ -30,13 +30,12 @@ class DoctrineMappingListener implements EventSubscriber
     {
         $classMetadata = $eventArgs->getClassMetadata();
 
-        $isPage     = is_a($classMetadata->getName(), $this->pageClass, true);
+        $isPage = is_a($classMetadata->getName(), $this->pageClass, true);
 
         if ($isPage) {
             $this->processParent($classMetadata, $this->pageClass);
             $this->processChildren($classMetadata, $this->pageClass);
         }
-
     }
 
     /**
@@ -54,7 +53,7 @@ class DoctrineMappingListener implements EventSubscriber
     }
 
     /**
-     * Declare self-bidirectionnal mapping for children
+     * Declare self-bidirectionnal mapping for children.
      */
     private function processChildren(ClassMetadata $classMetadata, string $class): void
     {
