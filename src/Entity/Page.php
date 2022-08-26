@@ -26,7 +26,9 @@ class Page
         EntityTimestampableTrait::__construct as private TimestampableConstruct;
     }
     use EntityNameSlugTrait;
-    use EntityThreeStateStatusTrait;
+    use EntityThreeStateStatusTrait {
+        EntityThreeStateStatusTrait::__construct as private StateStatusConstruct;
+    }
     use EntityPublishableTrait {
         EntityPublishableTrait::__construct as private PublishableConstruct;
     }
@@ -71,6 +73,7 @@ class Page
         $this->TimestampableConstruct();
         $this->PublishableConstruct();
         $this->SEOConstruct();
+        $this->StateStatusConstruct();
         $this->children = new ArrayCollection();
     }
 
