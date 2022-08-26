@@ -40,7 +40,6 @@ abstract class PageCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->addFormTheme('@EasyCommon/crud/custom_panel.html.twig')
             ->addFormTheme('@EasyMedia/form/easy-media.html.twig')
 
             ->setPageTitle(Crud::PAGE_INDEX, 'easy.page.admin.crud.title.page.'.Crud::PAGE_INDEX)
@@ -79,15 +78,16 @@ abstract class PageCrudController extends AbstractCrudController
         $subject = $context->getEntity();
 
         yield IdField::new('id')->onlyOnDetail();
+        yield FormField::addTab('easy.page.admin.panel.information');
         yield from $this->informationsFields($pageName, $subject);
+        yield FormField::addTab('easy.page.admin.panel.publication');
         yield from $this->seoFields($pageName, $subject);
-        yield from $this->publishFields($pageName, $subject);
         yield from $this->metadataFields($pageName, $subject);
+        yield from $this->publishFields($pageName, $subject);
     }
 
     public function informationsFields(string $pageName, $subject): iterable
     {
-        yield FormField::addPanel('easy.page.admin.panel.information')->addCssClass('col-12');
         yield TextField::new('name', 'easy.page.admin.field.name')
             ->setRequired(true)
             ->setColumns(12)
@@ -96,7 +96,7 @@ abstract class PageCrudController extends AbstractCrudController
 
     public function metadataFields(string $pageName, $subject): iterable
     {
-        yield FormField::addPanel('easy.page.admin.panel.metadatas')->collapsible()->addCssClass('col-4');
+        yield FormField::addPanel('easy.page.admin.panel.metadatas')->addCssClass('col-4');
         yield SlugField::new('slug', 'easy.page.admin.field.slug')
             ->setRequired(true)
             ->hideOnIndex()
@@ -124,13 +124,13 @@ abstract class PageCrudController extends AbstractCrudController
 
     public function seoFields(string $pageName, $subject): iterable
     {
-        yield FormField::addPanel('easy.page.admin.panel.seo')->collapsible()->addCssClass('col-4');
+        yield FormField::addPanel('easy.page.admin.panel.seo')->addCssClass('col-4');
         yield SEOField::new('seo');
     }
 
     public function publishFields(string $pageName, $subject): iterable
     {
-        yield FormField::addPanel('easy.page.admin.panel.publication')->collapsible()->addCssClass('col-4');
+        yield FormField::addPanel('easy.page.admin.panel.publication')->addCssClass('col-4');
         yield EnumField::new('state', 'easy.page.admin.field.state')
             ->setEnum(ThreeStateStatusEnum::class)
             ->setRequired(true)
