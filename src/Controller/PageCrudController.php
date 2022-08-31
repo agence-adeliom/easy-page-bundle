@@ -77,8 +77,8 @@ abstract class PageCrudController extends AbstractCrudController
         $context = $this->adminContextProvider->getContext();
         $subject = $context->getEntity();
 
-        yield IdField::new('id')->onlyOnDetail();
         yield FormField::addTab('easy.page.admin.panel.information');
+        yield IdField::new('id')->hideOnForm();
         yield from $this->informationsFields($pageName, $subject);
         yield FormField::addTab('easy.page.admin.panel.publication');
         yield from $this->seoFields($pageName, $subject);
