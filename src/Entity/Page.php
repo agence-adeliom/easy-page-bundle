@@ -10,8 +10,10 @@ use Adeliom\EasyCommonBundle\Traits\EntityThreeStateStatusTrait;
 use Adeliom\EasyCommonBundle\Traits\EntityTimestampableTrait;
 use Adeliom\EasySeoBundle\Traits\EntitySeoTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -47,7 +49,7 @@ class Page
     protected $parent;
 
     /**
-     * @var Page[]|ArrayCollection
+     * @var Page[]|Collection
      */
     protected $children;
 
@@ -100,9 +102,9 @@ class Page
     }
 
     /**
-     * @return Page[]|ArrayCollection
+     * @return Page[]|Collection
      */
-    public function getChildren(): array|ArrayCollection
+    public function getChildren(): array|Collection
     {
         return $this->children;
     }
