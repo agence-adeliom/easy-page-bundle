@@ -86,7 +86,8 @@ class PageController extends AbstractPageController
             'pages' => $pages,
             'page' => $currentPage,
             'breadcrumb' => $this->breadcrumb,
-        ];
+        ] + $request->attributes->all();
+
         $event = new EasyPageEvent($currentPage, $args, $template);
         /**
          * @var EasyPageEvent $result;
