@@ -11,7 +11,9 @@ use Adeliom\EasyCommonBundle\Traits\EntityTimestampableTrait;
 use Adeliom\EasySeoBundle\Traits\EntitySeoTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -195,7 +197,7 @@ class Page
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setSeoTitle(LifecycleEventArgs $event): void
+    public function setSeoTitle(PrePersistEventArgs|PreUpdateEventArgs $event): void
     {
         if (empty($this->getSEO()->title)) {
             $this->getSEO()->title = $this->getName();
@@ -203,7 +205,7 @@ class Page
     }
 
     #[ORM\PreRemove]
-    public function onRemove(LifecycleEventArgs $event): void
+    public function onRemove(PreRemoveEventArgs $event): void
     {
         $em = $event->getEntityManager();
         if (null !== $this->children && count($this->children)) {
