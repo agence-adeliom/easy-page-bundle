@@ -63,6 +63,9 @@ class Configuration implements ConfigurationInterface
                         })
                     ->end()
                 ->end()
+                ->booleanNode('trailing_slash')
+                    ->defaultFalse()
+                ->end()
                 ->arrayNode('layouts')
                     ->defaultValue([
                         'front' => [
