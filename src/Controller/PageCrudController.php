@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -75,7 +76,7 @@ abstract class PageCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $context = $this->adminContextProvider->getContext();
-        $subject = $context->getEntity();
+        $subject = $context?->getEntity();
 
         yield FormField::addTab('easy.page.admin.panel.information');
         yield IdField::new('id')->hideOnForm();
@@ -86,7 +87,10 @@ abstract class PageCrudController extends AbstractCrudController
         yield from $this->publishFields($pageName, $subject);
     }
 
-    public function informationsFields(string $pageName, $subject): iterable
+    /**
+     * @return FieldInterface[]
+     */
+    public function informationsFields(string $pageName, object $subject): iterable
     {
         yield TextField::new('name', 'easy.page.admin.field.name')
             ->setRequired(true)
@@ -94,7 +98,10 @@ abstract class PageCrudController extends AbstractCrudController
         ;
     }
 
-    public function metadataFields(string $pageName, $subject): iterable
+    /**
+     * @return FieldInterface[]
+     */
+    public function metadataFields(string $pageName, object $subject): iterable
     {
         yield FormField::addPanel('easy.page.admin.panel.metadatas')->addCssClass('col-4');
         yield SlugField::new('slug', 'easy.page.admin.field.slug')
@@ -122,13 +129,19 @@ abstract class PageCrudController extends AbstractCrudController
             ->setColumns(12);
     }
 
-    public function seoFields(string $pageName, $subject): iterable
+    /**
+     * @return FieldInterface[]
+     */
+    public function seoFields(string $pageName, object $subject): iterable
     {
         yield FormField::addPanel('easy.page.admin.panel.seo')->addCssClass('col-4');
         yield SEOField::new('seo');
     }
 
-    public function publishFields(string $pageName, $subject): iterable
+    /**
+     * @return FieldInterface[]
+     */
+    public function publishFields(string $pageName, object $subject): iterable
     {
         yield FormField::addPanel('easy.page.admin.panel.publication')->addCssClass('col-4');
         yield EnumField::new('state', 'easy.page.admin.field.state')
