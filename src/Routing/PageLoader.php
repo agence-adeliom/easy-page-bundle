@@ -21,6 +21,7 @@ class PageLoader extends Loader
          * @readonly
          */
         private PageRepository $repository,
+        private bool $trailingSlash,
         string $env = null
     ) {
         parent::__construct($env);
@@ -52,13 +53,13 @@ class PageLoader extends Loader
         }*/
 
         // prepare a new route
-        $path = '/{slugs}';
+        $path = '/{slugs}'.($this->trailingSlash ? '/' : '');
         $defaults = [
             '_controller' => $this->controller.'::index',
             'slugs' => '',
         ];
         $requirements = [
-            'slugs' => "([a-zA-Z0-9_-]+\/?)*",
+            'slugs' => $this->trailingSlash === true ? "([a-zA-Z0-9_-]+)*" : "([a-zA-Z0-9_-]+\/?)*",
         ];
         $route = new Route($path, $defaults, $requirements, [], '', [], [], "request.attributes.has('_easy_page_pages')");
 

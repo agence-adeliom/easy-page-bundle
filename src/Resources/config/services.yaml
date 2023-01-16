@@ -15,6 +15,7 @@ services:
             - '%easy_page.page_controller%'
             - '%easy_page.page_class%'
             - '@easy_page.repository'
+            - '%easy_page.trailing_slash%'
             - '%kernel.environment%'
         tags: [ routing.loader ]
 
