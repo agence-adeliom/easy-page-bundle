@@ -90,7 +90,7 @@ abstract class PageCrudController extends AbstractCrudController
     /**
      * @return FieldInterface[]
      */
-    public function informationsFields(string $pageName, ?EntityDto $subject): iterable
+    public function informationsFields(string $pageName, object $subject): iterable
     {
         yield TextField::new('name', 'easy.page.admin.field.name')
             ->setRequired(true)
@@ -101,7 +101,7 @@ abstract class PageCrudController extends AbstractCrudController
     /**
      * @return FieldInterface[]
      */
-    public function metadataFields(string $pageName, ?EntityDto $subject): iterable
+    public function metadataFields(string $pageName, object $subject): iterable
     {
         yield FormField::addPanel('easy.page.admin.panel.metadatas')->addCssClass('col-4');
         yield SlugField::new('slug', 'easy.page.admin.field.slug')
@@ -118,9 +118,9 @@ abstract class PageCrudController extends AbstractCrudController
 
         yield AssociationField::new('parent', 'easy.page.admin.field.parent')
             ->setQueryBuilder(static function (QueryBuilder $queryBuilder) use ($subject) {
-                $rootAlias = $queryBuilder->getAllAliases()[0];
-                if ($subject instanceof EntityDto && $subject->getPrimaryKeyValue()) {
-                    $queryBuilder->andWhere(sprintf('%s.id != :currentID', $rootAlias))
+                $rootAllias = $queryBuilder->getAllAliases()[0];
+                if ($subject->getPrimaryKeyValue()) {
+                    $queryBuilder->andWhere(sprintf('%s.id != :currentID', $rootAllias))
                         ->setParameter('currentID', $subject->getPrimaryKeyValue());
                 }
 
@@ -132,7 +132,7 @@ abstract class PageCrudController extends AbstractCrudController
     /**
      * @return FieldInterface[]
      */
-    public function seoFields(string $pageName, ?EntityDto $subject): iterable
+    public function seoFields(string $pageName, object $subject): iterable
     {
         yield FormField::addPanel('easy.page.admin.panel.seo')->addCssClass('col-4');
         yield SEOField::new('seo');
@@ -141,7 +141,7 @@ abstract class PageCrudController extends AbstractCrudController
     /**
      * @return FieldInterface[]
      */
-    public function publishFields(string $pageName, ?EntityDto $subject): iterable
+    public function publishFields(string $pageName, object $subject): iterable
     {
         yield FormField::addPanel('easy.page.admin.panel.publication')->addCssClass('col-4');
         yield EnumField::new('state', 'easy.page.admin.field.state')
