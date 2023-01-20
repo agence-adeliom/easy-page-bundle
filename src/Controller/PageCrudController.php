@@ -118,9 +118,9 @@ abstract class PageCrudController extends AbstractCrudController
 
         yield AssociationField::new('parent', 'easy.page.admin.field.parent')
             ->setQueryBuilder(static function (QueryBuilder $queryBuilder) use ($subject) {
-                $rootAllias = $queryBuilder->getAllAliases()[0];
-                if ($subject->getPrimaryKeyValue()) {
-                    $queryBuilder->andWhere(sprintf('%s.id != :currentID', $rootAllias))
+                $rootAlias = $queryBuilder->getAllAliases()[0];
+                if ($subject instanceof EntityDto && $subject->getPrimaryKeyValue()) {
+                    $queryBuilder->andWhere(sprintf('%s.id != :currentID', $rootAlias))
                         ->setParameter('currentID', $subject->getPrimaryKeyValue());
                 }
 
