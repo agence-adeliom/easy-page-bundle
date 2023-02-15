@@ -48,6 +48,15 @@ class DoctrineMappingListener implements EventSubscriber
                 'fieldName' => 'parent',
                 'targetEntity' => $class,
                 'inversedBy' => 'children',
+                'cascade' => ['persist', 'detach'],
+                'joinColumns' => [
+                    [
+                        'name' => 'parent_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'SET NULL',
+                    ],
+                ],
+                'nullable' => true
             ]);
         }
     }
