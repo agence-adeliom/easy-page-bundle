@@ -50,7 +50,8 @@ class SitemapSubscriber implements EventSubscriberInterface
                             'easy_page_index',
                             ['slugs' => $page->getTree()],
                             UrlGeneratorInterface::ABSOLUTE_URL
-                        )
+                        ),
+                        $page->getUpdatedAt()
                     ),
                     'pages'
                 );
