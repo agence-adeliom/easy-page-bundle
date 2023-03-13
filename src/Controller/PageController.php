@@ -76,6 +76,7 @@ class PageController extends AbstractPageController
         }
 
         $this->breadcrumb->addRouteItem('homepage', ['route' => 'easy_page_index']);
+
         if (!$currentPage->isHomepage()) {
             foreach ($pages as $page) {
                 $this->breadcrumb->addRouteItem($page->getName(), ['route' => 'easy_page_index', 'params' => ['slugs' => $page->getTree()]]);

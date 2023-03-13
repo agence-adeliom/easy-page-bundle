@@ -91,8 +91,18 @@ class LayoutsListener implements EventSubscriberInterface
         $slugsArray = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
         $pages = $this->pageRepository->findFrontPages($slugsArray, $event->getRequest()->getHost(), $event->getRequest()->getLocale());
 
-        if (count($pages) || ((is_countable($slugsArray) ? count($slugsArray) : 0) && count($pages) == (is_countable($slugsArray) ? count($slugsArray) : 0))) {
-            $event->getRequest()->attributes->set('_easy_page_pages', $pages);
+        $tree = [];
+        foreach ($pages as $page){
+            $current = $page;
+            do {
+                $tree[$current->getSlug()] = $current;
+                $current = $current->getParent();
+            } while ($current);
+        }
+
+        $page = current($tree);
+        if (($page && $page->isHomepage()) || (count($tree) && ((is_countable($slugsArray) ? count($slugsArray) : 0) && count($tree) == (is_countable($slugsArray) ? count($slugsArray) : 0)))) {
+            $event->getRequest()->attributes->set('_easy_page_pages', $tree);
         }
 
         $event->getRequest()->attributes->set('_easy_page_layout', $finalLayout);
