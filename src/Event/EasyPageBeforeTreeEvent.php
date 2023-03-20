@@ -8,14 +8,14 @@ use Symfony\Contracts\EventDispatcher\Event;
 class EasyPageBeforeTreeEvent extends Event
 {
     /**
-     * @var array{string, Page} $tree
+     * @var array<string, Page> $tree
      */
     public function __construct(protected array $tree = [])
     {
     }
 
     /**
-     * @return array{string, Page}
+     * @return array<string, Page>
      */
     public function getTree(): array
     {
@@ -24,7 +24,7 @@ class EasyPageBeforeTreeEvent extends Event
 
 
     /**
-     * @param array{string, Page} $tree
+     * @param array<string, Page> $tree
      */
     public function setTree(array $tree = [])
     {
