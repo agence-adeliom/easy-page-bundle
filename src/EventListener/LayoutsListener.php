@@ -106,8 +106,7 @@ class LayoutsListener implements EventSubscriberInterface
             } while ($current);
         }
 
-        $event = $this->eventDispatcher->dispatch(new EasyPageBeforeTreeEvent($tree));
-        $tree = $event->getTree();
+        $tree = ($this->eventDispatcher->dispatch(new EasyPageBeforeTreeEvent($tree)))->getTree();
         $page = current($tree);
         if (($page && $page->isHomepage()) || (count($tree) && ((is_countable($slugsArray) ? count($slugsArray) : 0) && count($tree) == (is_countable($slugsArray) ? count($slugsArray) : 0)))) {
             $event->getRequest()->attributes->set('_easy_page_pages', $tree);
