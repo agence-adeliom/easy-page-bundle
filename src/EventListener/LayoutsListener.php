@@ -3,7 +3,9 @@
 namespace Adeliom\EasyPageBundle\EventListener;
 
 use Adeliom\EasyPageBundle\Entity\Page;
+use Adeliom\EasyPageBundle\Event\EasyPageBeforeTreeEvent;
 use Adeliom\EasyPageBundle\Repository\PageRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -25,7 +27,11 @@ class LayoutsListener implements EventSubscriberInterface
         /**
          * @readonly
          */
-        private PageRepository $pageRepository
+        private PageRepository $pageRepository,
+        /**
+         * @readonly
+         */
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -100,6 +106,8 @@ class LayoutsListener implements EventSubscriberInterface
             } while ($current);
         }
 
+        $event = $this->eventDispatcher->dispatch(new EasyPageBeforeTreeEvent($tree));
+        $tree = $event->getTree();
         $page = current($tree);
         if (($page && $page->isHomepage()) || (count($tree) && ((is_countable($slugsArray) ? count($slugsArray) : 0) && count($tree) == (is_countable($slugsArray) ? count($slugsArray) : 0)))) {
             $event->getRequest()->attributes->set('_easy_page_pages', $tree);
