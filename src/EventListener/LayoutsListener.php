@@ -98,7 +98,7 @@ class LayoutsListener implements EventSubscriberInterface
         $pages = $this->pageRepository->findFrontPages($slugsArray, $event->getRequest()->getHost(), $event->getRequest()->getLocale());
 
         $tree = [];
-        foreach ($pages as $page){
+        foreach (array_reverse($pages) as $page){
             $current = $page;
             do {
                 $tree[$current->getSlug()] = $current;
@@ -107,7 +107,7 @@ class LayoutsListener implements EventSubscriberInterface
         }
 
         $tree = ($this->eventDispatcher->dispatch(new EasyPageBeforeTreeEvent($tree)))->getTree();
-        $page = current($tree);
+        $page = last($tree);
         if (($page && $page->isHomepage()) || (count($tree) && ((is_countable($slugsArray) ? count($slugsArray) : 0) && count($tree) == (is_countable($slugsArray) ? count($slugsArray) : 0)))) {
             $event->getRequest()->attributes->set('_easy_page_pages', $tree);
         }
