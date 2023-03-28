@@ -117,6 +117,7 @@ abstract class PageCrudController extends AbstractCrudController
             ->setColumns(12);
 
         yield AssociationField::new('parent', 'easy.page.admin.field.parent')
+            ->setRequired(false)
             ->setQueryBuilder(static function (QueryBuilder $queryBuilder) use ($subject) {
                 $rootAlias = $queryBuilder->getAllAliases()[0];
                 if ($subject instanceof EntityDto && $subject->getPrimaryKeyValue()) {

@@ -79,7 +79,7 @@ class PageController extends AbstractPageController
 
         if (!$currentPage->isHomepage()) {
             foreach ($pages as $page) {
-                $this->breadcrumb->addRouteItem($page->getName(), ['route' => 'easy_page_index', 'params' => ['slugs' => $page->getTree()]]);
+                $this->breadcrumb->addRouteItem($page->getName(), ['route' => 'easy_page_index', 'params' => ['slugs' => $page->getTree()]], $page);
             }
         }
 

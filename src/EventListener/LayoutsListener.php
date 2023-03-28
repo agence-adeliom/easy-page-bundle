@@ -96,9 +96,8 @@ class LayoutsListener implements EventSubscriberInterface
         /** @var Page[] $pages */
         $slugsArray = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
         $pages = $this->pageRepository->findFrontPages($slugsArray, $event->getRequest()->getHost(), $event->getRequest()->getLocale());
-
         $tree = [];
-        foreach (array_reverse($pages) as $page){
+        foreach ($pages as $page){
             $current = $page;
             do {
                 $tree[$current->getSlug()] = $current;
