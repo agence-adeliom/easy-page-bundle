@@ -2,7 +2,11 @@
     "name": "agence-adeliom/easy-page-bundle",
     "type": "symfony-bundle",
     "description": "A simple lightweight CMS bundle for Symfony",
-    "keywords": ["symfony", "cms", "easyadmin"],
+    "keywords": [
+        "symfony",
+        "cms",
+        "easyadmin"
+    ],
     "homepage": "https://github.com/agence-adeliom/easy-page-bundle",
     "license": "MIT",
     "authors": [
@@ -25,8 +29,8 @@
         "symfony/property-access": "^5.4 || ^6.0",
         "symfony/webpack-encore-bundle": "^1.10",
         "easycorp/easyadmin-bundle": "^3.4 || ^v4.0",
-        "agence-adeliom/easy-common-bundle": "^2.1",
-        "agence-adeliom/easy-seo-bundle": "^2.1",
+        "agence-adeliom/easy-common-bundle": "^2.0.96",
+        "agence-adeliom/easy-seo-bundle": "^2.0.96",
         "stof/doctrine-extensions-bundle": "^1.6"
     },
     "autoload": {
