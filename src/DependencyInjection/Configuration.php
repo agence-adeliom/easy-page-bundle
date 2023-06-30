@@ -63,6 +63,15 @@ class Configuration implements ConfigurationInterface
                         })
                     ->end()
                 ->end()
+                ->scalarNode('trailing_slash')
+                    ->defaultValue(false)
+                    ->validate()
+                        ->ifString()
+                        ->then(function ($value) {
+                            return (bool) $value;
+                        })
+                    ->end()
+                ->end()
                 ->arrayNode('layouts')
                     ->defaultValue([
                         'front' => [

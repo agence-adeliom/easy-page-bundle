@@ -60,7 +60,7 @@ class PageController extends AbstractPageController
         if ($slugs && $currentPage->isHomepage()) {
             $params = ['slugs' => ''];
 
-            return $this->redirect($this->generateUrl('easy_page_index', $params));
+            return $this->redirect(rtrim($this->generateUrl('easy_page_index', $params), '/') . '/');
         }
 
         if ($currentPage->getTemplate() && $this->twig->getLoader()->exists('@EasyPage/front/pages/'.$currentPage->getTemplate().'.html.twig')) {

@@ -11,16 +11,23 @@ class PageLoader extends Loader
 {
     private bool $isLoaded = false;
 
-    public function __construct(/**
+    public function __construct(
+        /**
          * @readonly
          */
-        private string $controller, /**
+        private string $controller,
+        /**
          * @readonly
          */
-        private string $entity, /**
+        private string $entity,
+        /**
          * @readonly
          */
         private PageRepository $repository,
+        /**
+         * @readonly
+         */
+        private bool $trailingSlash,
         string $env = null
     ) {
         parent::__construct($env);
@@ -52,13 +59,13 @@ class PageLoader extends Loader
         }*/
 
         // prepare a new route
-        $path = '/{slugs}';
+        $path = '/{slugs}' . ($this->trailingSlash ? '/' : '');
         $defaults = [
-            '_controller' => $this->controller.'::index',
+            '_controller' => $this->controller . '::index',
             'slugs' => '',
         ];
         $requirements = [
-            'slugs' => "([a-zA-Z0-9_-]+\/?)*",
+            'slugs' => "([a-zA-Z0-9_-]+\/?)*" . ($this->trailingSlash ? '|^$' : ''), // if trailing slash, then also allow for empty path (homepage)
         ];
         $route = new Route($path, $defaults, $requirements, [], '', [], [], "request.attributes.has('_easy_page_pages')");
 
