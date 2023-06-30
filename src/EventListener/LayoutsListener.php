@@ -97,9 +97,6 @@ class LayoutsListener implements EventSubscriberInterface
         $slugsArray = preg_split('#/#', $path, -1, PREG_SPLIT_NO_EMPTY);
         $pages = $this->pageRepository->findFrontPages($slugsArray, $event->getRequest()->getHost(), $event->getRequest()->getLocale());
         $tree = [];
-        $homePageInSlugsArray = false;
-        // TODO : how to know if home page has an url https://www.mysite.com/home or if
-        // it https://www.mysite.com/ (by default consider home page has no slug
         foreach (array_reverse($pages) as $page) {
             $current = $page;
             do {
@@ -108,23 +105,37 @@ class LayoutsListener implements EventSubscriberInterface
             } while ($current);
         }
 
+        /*
+         * Tree should contain the tree of page starting from the uppermost
+         * level (homepage), then descending by each child
+         */
         $tree = $this->eventDispatcher->dispatch(new EasyPageBeforeTreeEvent(array_reverse($tree)))->getTree();
         $page = end($tree);
 
-        if (
-            ($page && $page->isHomepage()) ||
-            (count($tree) &&
-                (
-                    (is_countable($slugsArray) ? count($slugsArray) : 0) &&
-                    (
-                        count($tree) - ($homePageInSlugsArray ? 0 : 1)
-                    )
-                    ==
-                    (is_countable($slugsArray) ? count($slugsArray) : 0)
-                )
-            )
-        ) {
+        if ($page && $page->isHomepage()) {
             $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+        }
+
+        if ($page && $page->getParent() && $page->getParent()->isHomepage()) {
+            $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+        }
+
+        if ($page && null === $page->getParent()) {
+            $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+        }
+
+        $homePageInSlugsArray = false;
+        // TODO : how to know if home page has an url https://www.mysite.com/home or if
+        // it https://www.mysite.com/ (by default consider home page has no slug
+
+        $treeCount = count($tree);
+        $slugsArrayCount = (is_countable($slugsArray) ? count($slugsArray) : 0);
+        if ($treeCount) {
+            $treeCountWithoutHomepage = $treeCount - ($homePageInSlugsArray ? 0 : 1);
+
+            if ($slugsArrayCount && ($treeCountWithoutHomepage === $slugsArrayCount)) {
+                $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+            }
         }
 
         $event->getRequest()->attributes->set('_easy_page_layout', $finalLayout);
