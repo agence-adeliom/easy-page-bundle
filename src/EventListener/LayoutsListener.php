@@ -66,7 +66,7 @@ class LayoutsListener implements EventSubscriberInterface
             }
 
             // Check pattern
-            if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
+            if ($layoutConfig['pattern'] && preg_match('~' . $layoutConfig['pattern'] . '~', $path)) {
                 $match = true;
             }
 
@@ -100,7 +100,8 @@ class LayoutsListener implements EventSubscriberInterface
         foreach (array_reverse($pages) as $page) {
             $current = $page;
             do {
-                $tree[$current->getSlug()] = $current;
+                $currentSlug = method_exists($current, 'getPageSlug') ? $current->getPageSlug() : $current->getSlug();
+                $tree[$currentSlug] = $current;
                 $current = $current->getParent();
             } while ($current);
         }
@@ -112,16 +113,19 @@ class LayoutsListener implements EventSubscriberInterface
         $tree = $this->eventDispatcher->dispatch(new EasyPageBeforeTreeEvent(array_reverse($tree)))->getTree();
         $page = end($tree);
 
-        if ($page && $page->isHomepage()) {
+        if ($page && method_exists($page, 'isHomepage') && $page->isHomepage()) {
             $event->getRequest()->attributes->set('_easy_page_pages', $tree);
-        }
+        } elseif ($page && $page->getParent() && method_exists($page->getParent(), 'isHomepage') && $page->getParent()->isHomepage()) {
+            $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+        } elseif ($page && null === $page->getParent()) {
+            $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+        } elseif ($page && array_keys($tree) === $slugsArray) {
+            if (is_countable($tree) && is_countable($slugsArray) && count($tree) === count($slugsArray)) {
+                $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+                $event->getRequest()->attributes->set('_easy_page_layout', $finalLayout);
+            }
 
-        if ($page && $page->getParent() && $page->getParent()->isHomepage()) {
-            $event->getRequest()->attributes->set('_easy_page_pages', $tree);
-        }
-
-        if ($page && null === $page->getParent()) {
-            $event->getRequest()->attributes->set('_easy_page_pages', $tree);
+            return;
         }
 
         $homePageInSlugsArray = false;

@@ -38,6 +38,7 @@ class Page
     use EntitySeoTrait {
         EntitySeoTrait::__construct as private SEOConstruct;
     }
+
     /**
      * @var string
      */
@@ -130,7 +131,8 @@ class Page
 
         $current = $this;
         do {
-            $tree = $name ? $current->getName().$separator.$tree : $current->getSlug().$separator.$tree;
+            $slug = method_exists($current, 'getPageSlug') ? $current->getPageSlug() : $current->getSlug();
+            $tree = $name ? $current->getName() . $separator . $tree : $slug . $separator . $tree;
             $current = $current->getParent();
         } while ($current);
 
@@ -139,11 +141,11 @@ class Page
 
     public function getTreeDisplay(): string
     {
-        $tree = ' '.$this->getName();
+        $tree = ' ' . $this->getName();
 
         $current = $this;
         do {
-            $tree = '―'.$tree;
+            $tree = '―' . $tree;
             $current = $current->getParent();
         } while ($current);
 
@@ -217,7 +219,7 @@ class Page
 
         $this->setState(ThreeStateStatusEnum::UNPUBLISHED());
         $this->parent = null;
-        $this->setName($this->getName().'-'.$this->getId().'-deleted');
-        $this->setSlug($this->getSlug().'-'.$this->getId().'-deleted');
+        $this->setName($this->getName() . '-' . $this->getId() . '-deleted');
+        $this->setSlug($this->getSlug() . '-' . $this->getId() . '-deleted');
     }
 }
