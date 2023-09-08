@@ -19,7 +19,11 @@ class SitemapSubscriber implements EventSubscriberInterface
         /**
          * @readonly
          */
-        private PageRepository $repository
+        private PageRepository $repository,
+        /**
+         * @readonly
+         */
+        private bool $sitemap = true,
     ) {
     }
 
@@ -35,7 +39,9 @@ class SitemapSubscriber implements EventSubscriberInterface
 
     public function populate(SitemapPopulateEvent $event): void
     {
-        $this->registerPagesUrls($event->getUrlContainer());
+        if ($this->sitemap) {
+            $this->registerPagesUrls($event->getUrlContainer());
+        }
     }
 
     public function registerPagesUrls(UrlContainerInterface $urls): void

@@ -100,6 +100,15 @@ class Configuration implements ConfigurationInterface
                         ->integerNode('ttl')->defaultValue(300)->end()
                     ->end()
                 ->end()
+                ->scalarNode('sitemap')
+                    ->defaultValue(true)
+                    ->validate()
+                    ->ifString()
+                    ->then(function ($value) {
+                        return (bool) $value;
+                    })
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
