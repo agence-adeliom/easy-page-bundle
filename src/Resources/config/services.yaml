@@ -47,6 +47,7 @@ services:
         arguments:
             - "@router"
             - "@easy_page.repository"
+            - "%easy_page.sitemap%"
         tags:
             - { name: "kernel.event_subscriber", priority: 100 }
 
