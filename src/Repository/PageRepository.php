@@ -52,9 +52,13 @@ class PageRepository extends ServiceEntityRepository
     {
         $qb = $this->getPublishedQuery();
 
-        return $qb->getQuery()
-            ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        if ($this->cacheEnabled) {
+            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
+        } else {
+            $qb = $qb->getQuery()->disableResultCache();
+        }
+
+        return $qb->getResult();
     }
 
     /**
@@ -66,9 +70,13 @@ class PageRepository extends ServiceEntityRepository
         $qb->andWhere("page.action != ''")
             ->andWhere('page.action IS NOT NULL');
 
-        return $qb->getQuery()
-            ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        if ($this->cacheEnabled) {
+            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
+        } else {
+            $qb = $qb->getQuery()->disableResultCache();
+        }
+
+        return $qb->getResult();
     }
 
     /**
@@ -80,9 +88,13 @@ class PageRepository extends ServiceEntityRepository
         $qb->andWhere('page.action = :action')
             ->setParameter('action', $action);
 
-        return $qb->getQuery()
-            ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        if ($this->cacheEnabled) {
+            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
+        } else {
+            $qb = $qb->getQuery()->disableResultCache();
+        }
+
+        return $qb->getResult();
     }
 
     /**
@@ -94,9 +106,13 @@ class PageRepository extends ServiceEntityRepository
         $qb->andWhere('page.template = :template')
             ->setParameter('template', $template);
 
-        return $qb->getQuery()
-            ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        if ($this->cacheEnabled) {
+            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
+        } else {
+            $qb = $qb->getQuery()->disableResultCache();
+        }
+
+        return $qb->getResult();
     }
 
     /**
@@ -108,9 +124,13 @@ class PageRepository extends ServiceEntityRepository
             ->andWhere('page.slug = :slug')
             ->setParameter('slug', $slug);
 
-        return $qb->getQuery()
-            ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        if ($this->cacheEnabled) {
+            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
+        } else {
+            $qb = $qb->getQuery()->disableResultCache();
+        }
+
+        return $qb->getResult();
     }
 
     /**
