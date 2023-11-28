@@ -40,7 +40,7 @@ services:
         arguments:
             - '%easy_page.page_class%'
         tags:
-            - doctrine.event_subscriber
+            - { name: 'doctrine.event_listener', event: 'loadClassMetadata' }
 
     easy_page.sitemap.page_subscriber:
         class: Adeliom\EasyPageBundle\EventListener\SitemapSubscriber
