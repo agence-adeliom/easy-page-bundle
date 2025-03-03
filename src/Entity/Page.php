@@ -217,7 +217,7 @@ class Page
             }
         }
 
-        $this->setState(ThreeStateStatusEnum::UNPUBLISHED());
+        $this->setState(ThreeStateStatusEnum::UNPUBLISHED);
         $this->parent = null;
         $this->setName($this->getName() . '-' . $this->getId() . '-deleted');
         $this->setSlug($this->getSlug() . '-' . $this->getId() . '-deleted');
