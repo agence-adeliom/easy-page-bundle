@@ -2,7 +2,7 @@
 
 namespace Adeliom\EasyPageBundle\EventListener;
 
-use Adeliom\EasyPageBundle\Repository\PageRepository;
+use Adeliom\EasyPageBundle\Repository\PageRepositoryInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
@@ -12,18 +12,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class SitemapSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        /**
-         * @readonly
-         */
-        private UrlGeneratorInterface $urlGenerator,
-        /**
-         * @readonly
-         */
-        private PageRepository $repository,
-        /**
-         * @readonly
-         */
-        private bool $sitemap = true,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly PageRepositoryInterface $pageRepository,
+        private readonly bool $sitemap = true,
     ) {
     }
 
@@ -33,7 +24,7 @@ class SitemapSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            SitemapPopulateEvent::ON_SITEMAP_POPULATE => 'populate',
+            SitemapPopulateEvent::class => 'populate',
         ];
     }
 
@@ -46,7 +37,7 @@ class SitemapSubscriber implements EventSubscriberInterface
 
     public function registerPagesUrls(UrlContainerInterface $urls): void
     {
-        $pages = $this->repository->getPublished();
+        $pages = $this->pageRepository->getPublished();
 
         foreach ($pages as $page) {
             if ($page->getSEO()->sitemap) {

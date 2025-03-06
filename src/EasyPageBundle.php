@@ -8,9 +8,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EasyPageBundle extends Bundle
 {
-    /**
-     * @return ExtensionInterface|null The container extension
-     */
     public function getContainerExtension(): ?ExtensionInterface
     {
         return new EasyPageExtension();

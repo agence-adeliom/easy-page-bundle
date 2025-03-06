@@ -12,51 +12,24 @@ class PageLoader extends Loader
     private bool $isLoaded = false;
 
     public function __construct(
-        /**
-         * @readonly
-         */
-        private string $controller,
-        /**
-         * @readonly
-         */
-        private string $entity,
-        /**
-         * @readonly
-         */
-        private PageRepository $repository,
-        /**
-         * @readonly
-         */
-        private bool $trailingSlash,
+        private readonly string $controller,
+        private readonly bool $trailingSlash,
         string $env = null
     ) {
         parent::__construct($env);
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception If something went wrong
+     * @return RouteCollection
      */
-    public function load($resource, string $type = null)
+    public function load(mixed $resource, string $type = null): mixed
     {
         if ($this->isLoaded) {
             throw new \RuntimeException('Do not add the "easy_page" loader twice');
         }
 
         $routes = new RouteCollection();
-
-        /*foreach ($this->repository->getAllCustom() as $pageEntity){
-            $path = sprintf('/%s', $pageEntity->getTree());
-            $defaults = [
-                '_controller' => $pageEntity->getAction(),
-                'page' => $pageEntity->getId()
-            ];
-            $requirements = [];
-            $route = new Route($path, $defaults, $requirements);
-            $routeName = 'easy_page_custom__' . mb_strtolower((new AsciiSlugger())->slug($pageEntity->getTree())->toString());
-            $routes->add($routeName, $route, -90);
-        }*/
 
         // prepare a new route
         $path = '/{slugs}' . ($this->trailingSlash ? '/' : '');
@@ -78,7 +51,7 @@ class PageLoader extends Loader
         return $routes;
     }
 
-    public function supports($resource, string $type = null): bool
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         return 'easy_page' === $type;
     }

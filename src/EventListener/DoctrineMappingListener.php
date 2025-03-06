@@ -15,10 +15,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 class DoctrineMappingListener
 {
     public function __construct(
-        /**
-         * @readonly
-         */
-        private string $pageClass
+        private readonly string $pageClass
     ) {
     }
 
@@ -50,9 +47,9 @@ class DoctrineMappingListener
                         'name' => 'parent_id',
                         'referencedColumnName' => 'id',
                         'onDelete' => 'SET NULL',
+                        'nullable' => true,
                     ],
                 ],
-                'nullable' => true
             ]);
         }
     }

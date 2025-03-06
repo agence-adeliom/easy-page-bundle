@@ -25,10 +25,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 abstract class PageCrudController extends AbstractCrudController
 {
     public function __construct(
-        /**
-         * @readonly
-         */
-        private AdminContextProvider $adminContextProvider
+        private readonly AdminContextProvider $adminContextProvider
     ) {
     }
 

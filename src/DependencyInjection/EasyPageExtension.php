@@ -30,7 +30,7 @@ class EasyPageExtension extends Extension
             $container->setParameter('easy_page.'.$key, $value);
         }
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
     }
 

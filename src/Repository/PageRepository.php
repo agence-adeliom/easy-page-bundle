@@ -7,19 +7,13 @@ use Adeliom\EasyPageBundle\Entity\Page;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-class PageRepository extends ServiceEntityRepository
+class PageRepository extends ServiceEntityRepository implements PageRepositoryInterface
 {
-    /**
-     * @var bool
-     */
-    protected $cacheEnabled = false;
+    protected bool $cacheEnabled = false;
 
-    /**
-     * @var int
-     */
-    protected $cacheTtl;
+    protected int $cacheTtl;
 
-    public function setConfig(array $cacheConfig)
+    public function setConfig(array $cacheConfig): void
     {
         $this->cacheEnabled = $cacheConfig['enabled'];
         $this->cacheTtl = $cacheConfig['ttl'];
@@ -38,7 +32,7 @@ class PageRepository extends ServiceEntityRepository
 
         $qb->andWhere($orModule);
 
-        $qb->setParameter('state', ThreeStateStatusEnum::PUBLISHED());
+        $qb->setParameter('state', ThreeStateStatusEnum::PUBLISHED->value);
         $qb->setParameter('publishDate', new \DateTime());
         $qb->setParameter('unpublishDate', new \DateTime());
 
@@ -48,7 +42,7 @@ class PageRepository extends ServiceEntityRepository
     /**
      * @return Page[]
      */
-    public function getPublished()
+    public function getPublished(): array
     {
         $qb = $this->getPublishedQuery();
 
@@ -62,61 +56,7 @@ class PageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Page[]
-     */
-    public function getAllCustom()
-    {
-        $qb = $this->getPublishedQuery();
-        $qb->andWhere("page.action != ''")
-            ->andWhere('page.action IS NOT NULL');
-
-        if ($this->cacheEnabled) {
-            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
-        } else {
-            $qb = $qb->getQuery()->disableResultCache();
-        }
-
-        return $qb->getResult();
-    }
-
-    /**
-     * @return Page[]
-     */
-    public function getByAction(string $action)
-    {
-        $qb = $this->getPublishedQuery();
-        $qb->andWhere('page.action = :action')
-            ->setParameter('action', $action);
-
-        if ($this->cacheEnabled) {
-            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
-        } else {
-            $qb = $qb->getQuery()->disableResultCache();
-        }
-
-        return $qb->getResult();
-    }
-
-    /**
-     * @return Page[]
-     */
-    public function getByTemplate(string $template)
-    {
-        $qb = $this->getPublishedQuery();
-        $qb->andWhere('page.template = :template')
-            ->setParameter('template', $template);
-
-        if ($this->cacheEnabled) {
-            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
-        } else {
-            $qb = $qb->getQuery()->disableResultCache();
-        }
-
-        return $qb->getResult();
-    }
-
-    /**
-     * @return Page[]
+     * @inheritDoc
      */
     public function getBySlug(string $slug): array
     {
@@ -134,11 +74,7 @@ class PageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Will search for pages to show in front depending on the arguments.
-     * If slugs are defined, there's no problem in looking for nulled host or locale,
-     * because slugs are unique, so it does not.
-     *
-     * @return Page[]
+     * @inheritDoc
      */
     public function findFrontPages(array $slugs = [], ?string $host = null, ?string $locale = null): array
     {
@@ -232,11 +168,16 @@ class PageRepository extends ServiceEntityRepository
 //        }
 //        $qb->andWhere($localeWhere);
 
+
+
+            if ($this->cacheEnabled) {
+                $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
+            } else {
+                $qb = $qb->getQuery()->disableResultCache();
+            }
+
             /** @var Page[] $results */
-            $results = $qb->getQuery()
-                ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-                ->getResult()
-            ;
+            $results = $qb->getResult();
 
             if ([] === $results) {
                 return $results;

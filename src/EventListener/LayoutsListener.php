@@ -16,22 +16,10 @@ use Twig\Source;
 class LayoutsListener implements EventSubscriberInterface
 {
     public function __construct(
-        /**
-         * @readonly
-         */
-        private array $layouts,
-        /**
-         * @readonly
-         */
-        private Environment $twig,
-        /**
-         * @readonly
-         */
-        private PageRepository $pageRepository,
-        /**
-         * @readonly
-         */
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly array $layouts,
+        private readonly Environment $twig,
+        private readonly PageRepository $pageRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
