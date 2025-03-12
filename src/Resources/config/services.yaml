@@ -4,7 +4,7 @@ services:
         autoconfigure: true
 
     Adeliom\EasyPageBundle\Controller\:
-        resource: '../src/Controller'
+        resource: '../../../src/Controller'
         autowire: true
         autoconfigure: true
         tags: [ 'controller.service_arguments' ]

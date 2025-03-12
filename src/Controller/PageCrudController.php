@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -142,8 +143,8 @@ abstract class PageCrudController extends AbstractCrudController
     public function publishFields(string $pageName, ?EntityDto $subject): iterable
     {
         yield FormField::addPanel('easy.page.admin.panel.publication')->addCssClass('col-4');
-        yield EnumField::new('state', 'easy.page.admin.field.state')
-            ->setEnum(ThreeStateStatusEnum::class)
+        yield ChoiceField::new('state', 'easy.page.admin.field.state')
+            ->setChoices(ThreeStateStatusEnum::cases())
             ->setRequired(true)
             ->renderExpanded(true)
             ->renderAsBadges(true);

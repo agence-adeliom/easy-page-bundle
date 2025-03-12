@@ -14,18 +14,9 @@ use Twig\Environment;
 class PageController extends AbstractPageController
 {
     public function __construct(
-        /**
-         * @readonly
-         */
-        private BreadcrumbCollection $breadcrumb,
-        /**
-         * @readonly
-         */
-        private Environment $twig,
-        /**
-         * @readonly
-         */
-        private EventDispatcherInterface $eventDispatcher
+        private readonly BreadcrumbCollection $breadcrumb,
+        private readonly Environment $twig,
+        private readonly EventDispatcherInterface $eventDispatcher
     ) {
     }
 
