@@ -3,7 +3,6 @@
 namespace Adeliom\EasyPageBundle\Controller;
 
 use Adeliom\EasyCommonBundle\Enum\ThreeStateStatusEnum;
-use Adeliom\EasyFieldsBundle\Admin\Field\EnumField;
 use Adeliom\EasySeoBundle\Admin\Field\SEOField;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
