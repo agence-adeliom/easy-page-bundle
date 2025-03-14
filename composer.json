@@ -38,7 +38,7 @@
             "Adeliom\\EasyPageBundle\\": "src/"
         }
     },
-    "minimum-stability": "alpha",
+    "minimum-stability": "dev",
     "repositories": [
         {
             "type": "path",
