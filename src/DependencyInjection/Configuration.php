@@ -67,9 +67,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(false)
                     ->validate()
                         ->ifString()
-                        ->then(function ($value) {
-                            return (bool) $value;
-                        })
+                        ->then(fn($value) => (bool) $value)
                     ->end()
                 ->end()
                 ->arrayNode('layouts')

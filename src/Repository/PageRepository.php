@@ -46,11 +46,7 @@ class PageRepository extends ServiceEntityRepository implements PageRepositoryIn
     {
         $qb = $this->getPublishedQuery();
 
-        if ($this->cacheEnabled) {
-            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
-        } else {
-            $qb = $qb->getQuery()->disableResultCache();
-        }
+        $qb = $this->cacheEnabled ? $qb->getQuery()->enableResultCache($this->cacheTtl) : $qb->getQuery()->disableResultCache();
 
         return $qb->getResult();
     }
@@ -64,11 +60,7 @@ class PageRepository extends ServiceEntityRepository implements PageRepositoryIn
             ->andWhere('page.slug = :slug')
             ->setParameter('slug', $slug);
 
-        if ($this->cacheEnabled) {
-            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
-        } else {
-            $qb = $qb->getQuery()->disableResultCache();
-        }
+        $qb = $this->cacheEnabled ? $qb->getQuery()->enableResultCache($this->cacheTtl) : $qb->getQuery()->disableResultCache();
 
         return $qb->getResult();
     }
@@ -98,11 +90,9 @@ class PageRepository extends ServiceEntityRepository implements PageRepositoryIn
                 $item = $item->getParent();
 
                 if (!$item instanceof Page) {
-                    if (method_exists($item, 'getState')) {
-                        // If getState exists, checks if item is published to return (or not) a 404
-                        if ($item->getState() !== ThreeStateStatusEnum::PUBLISHED()->getValue()) {
-                            $allItemsPublished = false;
-                        }
+                    // If getState exists, checks if item is published to return (or not) a 404
+                    if (method_exists($item, 'getState') && $item->getState() !== ThreeStateStatusEnum::PUBLISHED()->getValue()) {
+                        $allItemsPublished = false;
                     }
 
                     if (!$hasNonPageElement) {
@@ -118,10 +108,8 @@ class PageRepository extends ServiceEntityRepository implements PageRepositoryIn
 
 			$constructedKeys = array_keys($tempConstructedTree);
 
-			if($hasNonPageElement){
-				if($constructedKeys !== $slugs){
-					return [];
-				}
+			if($hasNonPageElement && $constructedKeys !== $slugs){
+				return [];
 			}
 
             if ($constructedKeys === $slugs) {
@@ -170,11 +158,7 @@ class PageRepository extends ServiceEntityRepository implements PageRepositoryIn
 
 
 
-            if ($this->cacheEnabled) {
-                $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
-            } else {
-                $qb = $qb->getQuery()->disableResultCache();
-            }
+            $qb = $this->cacheEnabled ? $qb->getQuery()->enableResultCache($this->cacheTtl) : $qb->getQuery()->disableResultCache();
 
             /** @var Page[] $results */
             $results = $qb->getResult();

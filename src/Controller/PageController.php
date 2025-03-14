@@ -32,7 +32,7 @@ class PageController extends AbstractPageController
     public function index(Request $request, string $slugs = '', string $_locale = null): Response
     {
         if (preg_match('#/$#', $slugs)) {
-            return $this->redirect($this->generateUrl('easy_page_index', ['slugs' => rtrim($slugs, '/')]));
+            return $this->redirectToRoute('easy_page_index', ['slugs' => rtrim($slugs, '/')]);
         }
 
         $template = '@EasyPage/front/pages/default.html.twig';
@@ -105,7 +105,7 @@ class PageController extends AbstractPageController
      */
     protected function getPages(?array $pages = []): array
     {
-        if (empty($pages)) {
+        if ($pages === null || $pages === []) {
             throw $this->createNotFoundException('Page not found');
         }
 

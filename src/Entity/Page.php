@@ -201,7 +201,7 @@ class Page
     #[ORM\PreUpdate]
     public function setSeoTitle(PrePersistEventArgs|PreUpdateEventArgs $event): void
     {
-        if (empty($this->getSEO()->title)) {
+        if ($this->getSEO()->title === null || $this->getSEO()->title === '' || $this->getSEO()->title === '0') {
             $this->getSEO()->title = $this->getName();
         }
     }

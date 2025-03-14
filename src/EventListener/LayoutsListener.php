@@ -122,7 +122,7 @@ class LayoutsListener implements EventSubscriberInterface
 
         $treeCount = count($tree);
         $slugsArrayCount = (is_countable($slugsArray) ? count($slugsArray) : 0);
-        if ($treeCount) {
+        if ($treeCount !== 0) {
             $treeCountWithoutHomepage = $treeCount - ($homePageInSlugsArray ? 0 : 1);
 
             if ($slugsArrayCount && ($treeCountWithoutHomepage === $slugsArrayCount)) {
