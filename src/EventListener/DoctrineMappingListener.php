@@ -50,9 +50,9 @@ class DoctrineMappingListener
                         'name' => 'parent_id',
                         'referencedColumnName' => 'id',
                         'onDelete' => 'SET NULL',
+                        'nullable' => true,
                     ],
                 ],
-                'nullable' => true
             ]);
         }
     }
