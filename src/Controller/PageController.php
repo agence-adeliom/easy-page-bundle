@@ -29,7 +29,7 @@ class PageController extends AbstractPageController
         ]);
     }
 
-    public function index(Request $request, string $slugs = '', string $_locale = null): Response
+    public function index(Request $request, string $slugs = '', ?string $_locale = null): Response
     {
         if (preg_match('#/$#', $slugs)) {
             return $this->redirectToRoute('easy_page_index', ['slugs' => rtrim($slugs, '/')]);

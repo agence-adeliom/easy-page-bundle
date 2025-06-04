@@ -13,7 +13,7 @@ final class PageCollector extends AbstractDataCollector
     {
     }
 
-    public function collect(Request $request, Response $response, \Throwable $exception = null): void
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
     {
         $layout = $request->get('_easy_page_layout');
         $layouts = $this->parameterBag->get('easy_page.layouts');
