@@ -14,7 +14,7 @@ class PageLoader extends Loader
     public function __construct(
         private readonly string $controller,
         private readonly bool $trailingSlash,
-        string $env = null
+        ?string $env = null
     ) {
         parent::__construct($env);
     }
