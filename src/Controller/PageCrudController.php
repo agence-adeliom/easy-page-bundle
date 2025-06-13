@@ -100,7 +100,7 @@ abstract class PageCrudController extends AbstractCrudController
      */
     public function metadataFields(string $pageName, ?EntityDto $subject): iterable
     {
-        yield FormField::addPanel('easy.page.admin.panel.metadatas')->addCssClass('col-4');
+        yield FormField::addFieldset('easy.page.admin.panel.metadatas')->addCssClass('col-4');
         yield SlugField::new('slug', 'easy.page.admin.field.slug')
             ->setRequired(true)
             ->hideOnIndex()
@@ -132,7 +132,7 @@ abstract class PageCrudController extends AbstractCrudController
      */
     public function seoFields(string $pageName, ?EntityDto $subject): iterable
     {
-        yield FormField::addPanel('easy.page.admin.panel.seo')->addCssClass('col-4');
+        yield FormField::addFieldset('easy.page.admin.panel.seo')->addCssClass('col-4');
         yield SEOField::new('seo');
     }
 
@@ -141,7 +141,7 @@ abstract class PageCrudController extends AbstractCrudController
      */
     public function publishFields(string $pageName, ?EntityDto $subject): iterable
     {
-        yield FormField::addPanel('easy.page.admin.panel.publication')->addCssClass('col-4');
+        yield FormField::addFieldset('easy.page.admin.panel.publication')->addCssClass('col-4');
         yield ChoiceField::new('state', 'easy.page.admin.field.state')
             ->setChoices(ThreeStateStatusEnum::cases())
             ->setRequired(true)
