@@ -41,25 +41,16 @@
     "minimum-stability": "dev",
     "repositories": [
         {
-            "type": "path",
-            "url": "../easy-common-bundle",
-            "options": {
-                "symlink": true
-            }
+            "type": "vcs",
+            "url": "git@github.com:agence-adeliom/easy-common-bundle"
         },
         {
-            "type": "path",
-            "url": "../easy-seo-bundle",
-            "options": {
-                "symlink": true
-            }
+            "type": "vcs",
+            "url": "git@github.com:agence-adeliom/easy-seo-bundle"
         },
         {
-            "type": "path",
-            "url": "../easy-fields-bundle",
-            "options": {
-                "symlink": true
-            }
+            "type": "vcs",
+            "url": "git@github.com:agence-adeliom/easy-fields-bundle"
         }
     ]
 }
