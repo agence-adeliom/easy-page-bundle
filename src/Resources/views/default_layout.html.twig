@@ -6,16 +6,13 @@
     <title>{% block title %}{{ seo_title('Welcome to Easy Page !') }}{% endblock %}</title>
 
     {% block easy_page_head_metas %}{% endblock %}
-    {% block stylesheets %}{% endblock %}
+    {% block stylesheets %}
+        <script src="https://cdn.tailwindcss.com"></script>
+    {% endblock %}
 </head>
 <body>
     <div class="col-lg-8 mx-auto p-3 py-md-5">
         {% block easy_page_page_header %}
-        <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-            <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-                <span class="fs-4">{% block header_title %}Welcome to Easy Page !{% endblock %}</span>
-            </a>
-        </header>
         <a href="/admin/login" class="d-flex align-items-center text-dark text-decoration-none">
             <span class="fs-4">Go to Administration</span>
         </a>
