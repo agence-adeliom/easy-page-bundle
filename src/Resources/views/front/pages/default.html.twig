@@ -32,6 +32,12 @@
             <h1>{{ page.name }}</h1>
         </article>
     </section>
+
+    {% if page.content is defined %}
+        {% for block in page.content %}
+            {{ easy_editor_block(block) }}
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
