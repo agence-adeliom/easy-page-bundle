@@ -30,6 +30,7 @@ easy:
         action: Action
         action_help: "To apply change you have to clear symfony cache"
         parent: Parent page
+        home_page: Homepage
         name: Name
         state: Status
         publishDate: Publish date
@@ -38,8 +39,8 @@ easy:
         slug_edit: "Are you sure you want to edit this permalink ?"
         category: Category
     front:
-      categories: Catégories
-      category: Catégorie
+      categories: Categories
+      category: Catégory
       entries: Questions
       readmore: Read more
 home: Homepage

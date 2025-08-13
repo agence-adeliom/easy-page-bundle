@@ -39,4 +39,8 @@ easy:
         slug_edit: "Etes-vous sur de vouloir modifier le permalien ?"
         category: Catégorie
     front:
-      home: Page d'accueil
+        categories: Catégories
+        category: Catégorie
+        entries: Questions
+        readmore: Lire plus
+home: Page d'accueil
