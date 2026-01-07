@@ -4,6 +4,7 @@ namespace Adeliom\EasyPageBundle\EventListener;
 
 use Adeliom\EasyPageBundle\Entity\Page;
 use Adeliom\EasyPageBundle\Event\EasyPageBeforeTreeEvent;
+use Adeliom\EasyPageBundle\Event\EasyPageLayoutListenerEarlyStopEvent;
 use Adeliom\EasyPageBundle\Repository\PageRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -48,6 +49,11 @@ class LayoutsListener implements EventSubscriberInterface
     public function setRequestLayout(RequestEvent $event): void
     {
         $request = $event->getRequest();
+
+        $earlyStop = $this->eventDispatcher->dispatch(new EasyPageLayoutListenerEarlyStopEvent($request));
+        if ($earlyStop->isEarlyStop()) {
+            return;
+        }
 
         // Get the necessary informations to check them in layout configurations
         $path = $request->getPathInfo();
