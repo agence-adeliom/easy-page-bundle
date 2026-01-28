@@ -54,3 +54,7 @@
         </script>
     {% endif %}
 {% endblock %}
+
+{% block seo_debug %}
+    {% include 'components/_seo_debug.html.twig' with { seo: page.seo } %}
+{% endblock %}
