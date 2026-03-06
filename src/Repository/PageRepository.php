@@ -91,7 +91,7 @@ class PageRepository extends ServiceEntityRepository implements PageRepositoryIn
 
                 if (!$item instanceof Page) {
                     // If getState exists, checks if item is published to return (or not) a 404
-                    if (method_exists($item, 'getState') && $item->getState() !== ThreeStateStatusEnum::PUBLISHED()->getValue()) {
+                    if (method_exists($item, 'getState') && $item->getState() !== ThreeStateStatusEnum::PUBLISHED->value) {
                         $allItemsPublished = false;
                     }
 
