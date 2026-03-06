@@ -209,7 +209,7 @@ class Page
     #[ORM\PreRemove]
     public function onRemove(PreRemoveEventArgs $event): void
     {
-        $em = $event->getEntityManager();
+        $em = $event->getObjectManager();
         if (null !== $this->children && count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);

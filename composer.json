@@ -42,6 +42,11 @@
             "Adeliom\\EasyPageBundle\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Adeliom\\EasyPageBundle\\Tests\\": "tests/"
+        }
+    },
     "minimum-stability": "dev",
     "repositories": [
         {
