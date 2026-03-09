@@ -16,13 +16,21 @@ final class DoctrineMappingListenerTest extends TestCase
 {
     public function testListenerMapsParentAndChildrenAssociations(): void
     {
-        $metadata = new ClassMetadata(TestPage::class);
+        $metadata = $this->getMockBuilder(ClassMetadata::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getName', 'hasAssociation', 'mapManyToOne', 'mapOneToMany'])
+            ->getMock();
+
+        $metadata->method('getName')->willReturn(TestPage::class);
+        $metadata->method('hasAssociation')->willReturn(false);
+        $metadata->expects(self::once())->method('mapManyToOne')
+            ->with(self::callback(fn ($m) => $m['fieldName'] === 'parent' && $m['targetEntity'] === TestPage::class));
+        $metadata->expects(self::once())->method('mapOneToMany')
+            ->with(self::callback(fn ($m) => $m['fieldName'] === 'children' && $m['targetEntity'] === TestPage::class));
+
         $event = $this->createMock(LoadClassMetadataEventArgs::class);
         $event->method('getClassMetadata')->willReturn($metadata);
 
         (new DoctrineMappingListener(TestPage::class))->loadClassMetadata($event);
-
-        self::assertTrue($metadata->hasAssociation('parent'));
-        self::assertTrue($metadata->hasAssociation('children'));
     }
 }
