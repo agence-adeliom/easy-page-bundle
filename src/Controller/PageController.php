@@ -2,6 +2,7 @@
 
 namespace Adeliom\EasyPageBundle\Controller;
 
+use Adeliom\EasyCommonBundle\Event\LegacyEventDispatcher;
 use Adeliom\EasyPageBundle\Entity\Page;
 use Adeliom\EasyPageBundle\Event\EasyPageEvent;
 use Adeliom\EasyPageBundle\Repository\PageRepository;
@@ -84,7 +85,12 @@ class PageController extends AbstractPageController
         /**
          * @var EasyPageEvent $result;
          */
-        $result = $this->eventDispatcher->dispatch($event);
+        $result = LegacyEventDispatcher::dispatch(
+            $event,
+            $this->eventDispatcher,
+            'agence-adeliom/easy-page-bundle',
+            EasyPageEvent::NAME
+        );
 
         if (!empty($args['page']->getAction())) {
             $args = $result->getArgs();
