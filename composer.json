@@ -31,11 +31,11 @@
         "symfony/options-resolver": "^6.4 || ^7.0",
         "symfony/property-access": "^6.4 || ^7.0",
         "symfony/webpack-encore-bundle": "^2.2.0",
-        "easycorp/easyadmin-bundle": "^3.4 || ^v4.0",
+        "easycorp/easyadmin-bundle": "^4.10",
         "agence-adeliom/easy-common-bundle": "^3.1",
         "agence-adeliom/easy-seo-bundle": "^3.1",
         "agence-adeliom/easy-fields-bundle": "^3.1",
-        "stof/doctrine-extensions-bundle": "^1.13"
+        "stof/doctrine-extensions-bundle": "^1.15"
     },
     "autoload": {
         "psr-4": {
